@@ -1,0 +1,19 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# Local Cloudflare state (local D1 database, dev caches)
+.wrangler/
+
+# Secrets: never commit. Copy .dev.vars.example to .dev.vars instead.
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env
+.env.*
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.log
