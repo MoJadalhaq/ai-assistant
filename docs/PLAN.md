@@ -2,7 +2,7 @@
 
 > Demo project. **Sahil Demo Hotel, Jeddah is fictional.** All names, prices, phone numbers and bookings in this repo are made up.
 
-Status: **Phase 3 guest UI is done; the first deploy is next.** This file is the reference for decisions; it is updated when a decision changes.
+Status: **Phase 3 is done: the guest chat page is live on Cloudflare Workers. The staff dashboard (Phase 4) is next.** This file is the reference for decisions; it is updated when a decision changes.
 
 | Phase | What | Status |
 |---|---|---|
@@ -10,7 +10,7 @@ Status: **Phase 3 guest UI is done; the first deploy is next.** This file is the
 | 1 | Data + tools | Done |
 | 2a | Tool loop, system prompt, `/api/chat`, burst rate limit, terminal chat | Done |
 | 2b | Evals (`evals/cases.json`, `npm run eval`), daily quota cap in D1, booking-confirmation guard | Done |
-| 3 | Guest UI (done) + first deploy (next) | In progress |
+| 3 | Guest UI + first deploy (D1 database created in Cloudflare, migrations applied, demo data loaded, Worker deployed) | Done |
 
 **Findings from the first real runs (Phase 2a):**
 - Writing earlier tool results into the history as *text* made the model imitate that text and report a booking it never made, with an invented reference. Earlier tool calls are now replayed as real function-call parts (decision 19). The 2b evals must include a "no booking without a tool call" check.

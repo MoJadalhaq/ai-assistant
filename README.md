@@ -4,7 +4,7 @@
 
 A web demo of an AI receptionist that chats with hotel guests in Saudi Arabic dialect, English, or both in one sentence. It answers questions from the hotel's knowledge base, checks room availability, creates booking holds, and hands off to staff with a short summary in both languages.
 
-**Status: work in progress.** The data layer, the four tools, the Gemini tool loop, `/api/chat` and the bilingual chat page are built, tested and evaluated. Deployment and the staff dashboard come next. The plan and the design decisions are in [docs/PLAN.md](docs/PLAN.md).
+**Status: work in progress.** The data layer, the four tools, the Gemini tool loop, `/api/chat` and the bilingual chat page are built, tested, evaluated and deployed on Cloudflare Workers. The staff dashboard comes next. The plan and the design decisions are in [docs/PLAN.md](docs/PLAN.md).
 
 ## Evals
 

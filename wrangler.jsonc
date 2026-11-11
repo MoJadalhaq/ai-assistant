@@ -21,7 +21,7 @@
 			"database_name": "ai-receptionist-db",
 			// Placeholder: local development ignores it. Replaced with the real id
 			// when the database is created on Cloudflare in Phase 3.
-			"database_id": "00000000-0000-0000-0000-000000000000",
+			"database_id": "9cd13983-4dec-4a6b-af56-74ba9ead910f",
 			"migrations_dir": "migrations"
 		}
 	],
