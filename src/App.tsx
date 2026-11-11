@@ -1,40 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { GuestChat } from "./pages/GuestChat.tsx";
+import { useStrings, useUiStore } from "./store/ui-store.ts";
 
-interface Health {
-  ok: boolean;
-  today: string;
-  roomTypes?: number;
-  hint?: string;
+// Two pages don't need a router: the Worker serves index.html for every path (SPA mode in
+// wrangler.jsonc), and this picks the page from the URL.
+export default function App() {
+  const language = useUiStore((state) => state.language);
+  const t = useStrings();
+
+  // Setting dir on <html> flips the whole layout (Tailwind's start/end utilities follow it).
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.title = t.pageTitle;
+  }, [language, t.pageTitle]);
+
+  return window.location.pathname.startsWith("/staff") ? <StaffComingSoon /> : <GuestChat />;
 }
 
-// Placeholder page for Phase 1. Its only job is to prove that React, Tailwind and the
-// Worker API are wired together. The guest chat replaces it in Phase 3.
-export default function App() {
-  const [health, setHealth] = useState<Health | null>(null);
-  const [unreachable, setUnreachable] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/health")
-      .then((response) => response.json() as Promise<Health>)
-      .then(setHealth)
-      .catch(() => setUnreachable(true));
-  }, []);
-
+/** Placeholder until the staff dashboard (Phase 4). */
+function StaffComingSoon() {
+  const t = useStrings();
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-4 p-6 text-slate-800">
-      <span className="self-start rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-900">
-        Demo, fictional hotel
-      </span>
-      <h1 className="text-2xl font-semibold">Sahil Demo Hotel, Jeddah</h1>
-      <p className="text-slate-600">AI receptionist. The chat arrives in Phase 3; this page checks the setup.</p>
-      <p className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm">{describe(health, unreachable)}</p>
+    <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-3 p-6 text-center">
+      <p className="text-slate-700">{t.staffSoon}</p>
+      <a href="/" className="font-medium text-teal-700 underline underline-offset-2">
+        {t.backToChat}
+      </a>
     </main>
   );
-}
-
-function describe(health: Health | null, unreachable: boolean): string {
-  if (unreachable) return "The API did not answer.";
-  if (!health) return "Checking the API…";
-  if (!health.ok) return `The API answered, but the database is not ready. ${health.hint ?? ""}`;
-  return `API and database are up. Today in Riyadh: ${health.today}. Room types: ${health.roomTypes}.`;
 }

@@ -93,11 +93,11 @@ export function parseChatRequest(body: unknown): ChatRequest | { problems: strin
   }
   if (problems.length > 0) return { problems };
 
-  return {
-    sessionId: sessionId as string,
-    message: (message as string).trim(),
-    history: (history as ChatTurn[]).slice(-MAX_HISTORY_TURNS),
-  };
+  const recent = (history as ChatTurn[]).slice(-MAX_HISTORY_TURNS);
+  // The cut can land mid-exchange. The conversation sent to the model should start with the guest.
+  while (recent[0]?.role === "assistant") recent.shift();
+
+  return { sessionId: sessionId as string, message: (message as string).trim(), history: recent };
 }
 
 function isChatTurn(value: unknown): value is ChatTurn {

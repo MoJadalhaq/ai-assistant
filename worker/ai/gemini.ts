@@ -78,21 +78,29 @@ export function createGeminiClient(apiKey: string, model: string, thinkingLevel?
       try {
         return await callOnce(request);
       } catch (error) {
-        if (!(error instanceof ApiError)) throw error;
-        if (error.status === 429) throw new ModelBusyError(QUOTA_RETRY_SECONDS);
-        if (error.status !== 503) throw error;
+        if (error instanceof ApiError && error.status === 429) throw new ModelBusyError(QUOTA_RETRY_SECONDS);
+        if (!isTemporary(error)) throw error;
       }
 
-      // Overloaded (503): wait briefly and try once more.
+      // Overloaded, or the connection dropped: wait briefly and try once more.
       await new Promise((resolve) => setTimeout(resolve, OVERLOAD_RETRY_DELAY_MS));
       try {
         return await callOnce(request);
       } catch (error) {
-        if (error instanceof ApiError && (error.status === 429 || error.status === 503)) {
-          throw new ModelBusyError(error.status === 429 ? QUOTA_RETRY_SECONDS : OVERLOAD_RETRY_SECONDS);
-        }
+        if (error instanceof ApiError && error.status === 429) throw new ModelBusyError(QUOTA_RETRY_SECONDS);
+        if (isTemporary(error)) throw new ModelBusyError(OVERLOAD_RETRY_SECONDS);
         throw error;
       }
     },
   };
+}
+
+/**
+ * Worth one retry: Gemini overloaded (503), or the request never got an HTTP answer at all
+ * (connection reset, DNS, timeout). Any other API error, such as a 400 for a bad request,
+ * would fail the same way again.
+ */
+function isTemporary(error: unknown): boolean {
+  if (error instanceof ApiError) return error.status === 503;
+  return error instanceof Error;
 }

@@ -1,2 +1,15 @@
 /* Tailwind CSS v4: this one import replaces the old config file and @tailwind directives. */
 @import "tailwindcss";
+
+/* IBM Plex Sans Arabic covers Arabic and Latin in one family, so mixed messages look consistent. */
+@theme {
+  --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 font-sans text-slate-900 antialiased;
+}

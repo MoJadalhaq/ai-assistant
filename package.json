@@ -20,13 +20,16 @@
     "db:seed": "node scripts/seed-local.ts",
     "tool": "node scripts/try-tool.ts",
     "chat": "node --env-file=.dev.vars scripts/chat-cli.ts",
-    "eval": "node --env-file=.dev.vars evals/run.ts"
+    "eval": "node --env-file=.dev.vars evals/run.ts",
+    "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
+    "db:seed:remote": "node scripts/seed-sql.ts && wrangler d1 execute DB --remote --file=.wrangler/seed.sql"
   },
   "dependencies": {
     "@google/genai": "^3.1.0",
     "hono": "^4.13.17",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "zustand": "^5.1.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.68.0",
