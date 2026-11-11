@@ -19,6 +19,13 @@ export function riyadhToday(now: Date): string {
   return shifted.toISOString().slice(0, 10);
 }
 
+/** Seconds left until the date changes in Riyadh: when daily limits start over. */
+export function secondsUntilRiyadhMidnight(now: Date): number {
+  const nextMidnightUtcMs =
+    Date.parse(`${addDays(riyadhToday(now), 1)}T00:00:00Z`) - RIYADH_UTC_OFFSET_HOURS * MS_PER_HOUR;
+  return Math.ceil((nextMidnightUtcMs - now.getTime()) / 1000);
+}
+
 /** Time of day in Riyadh, 'HH:MM'. */
 export function riyadhClock(now: Date): string {
   const shifted = new Date(now.getTime() + RIYADH_UTC_OFFSET_HOURS * MS_PER_HOUR);

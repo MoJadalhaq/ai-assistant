@@ -10,6 +10,8 @@ export interface ToolContext {
   sessionId: string | null;
   /** Language of the guest's messages, worked out by detectLanguage(), not reported by the model. */
   language: Language;
+  /** The guest message being answered. create_booking_hold uses it to check that the details were read back first. */
+  latestGuestMessage?: string;
   /** Tests replace this to force a reference-code clash. */
   newReferenceCode?: () => string;
 }

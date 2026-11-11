@@ -1,3 +1,4 @@
+import { normalizeDigits } from "../../shared/text.ts";
 import type { Booking, Room } from "../../shared/types.ts";
 import { MAX_ROOMS_PER_BOOKING, roomsNeeded } from "../domain/availability.ts";
 import { daysBetween, findStayProblem, riyadhToday } from "../domain/dates.ts";
@@ -46,6 +47,17 @@ export async function createBookingHold(rawArgs: unknown, ctx: ToolContext): Pro
     return fail(
       "invalid_phone",
       "That phone number is not valid. Ask the guest to give it again. A Saudi mobile has 10 digits and starts with 05; a number from another country needs its country code.",
+    );
+  }
+
+  // guest_confirmed is set by the model, so on its own it proves nothing: a first real test run
+  // booked as soon as the guest gave their phone number. This rule can't be talked around:
+  // if the number is in the message being answered, the guest has only just given it,
+  // so it can't have been read back to them yet.
+  if (ctx.latestGuestMessage && messageContainsPhone(ctx.latestGuestMessage, phone)) {
+    return fail(
+      "not_confirmed",
+      "The guest has only just given these details. Read back room, dates, nights, guests, total price, name and phone, and wait for a clear yes in their next message before calling this tool again.",
     );
   }
 
@@ -103,6 +115,13 @@ export async function createBookingHold(rawArgs: unknown, ctx: ToolContext): Pro
   }
 
   throw new Error(`No unique booking reference after ${MAX_REFERENCE_ATTEMPTS} attempts`);
+}
+
+/** True when the message contains the phone number in any common form (spaces, dashes, Arabic digits, with or without the country code). */
+function messageContainsPhone(message: string, normalizedPhone: string): boolean {
+  const messageDigits = normalizeDigits(message).replace(/\D/g, "");
+  const lastNineDigits = normalizedPhone.replace(/\D/g, "").slice(-9);
+  return messageDigits.includes(lastNineDigits);
 }
 
 function holdCreated(booking: Booking, room: Room): ToolResult {

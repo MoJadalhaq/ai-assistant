@@ -205,6 +205,20 @@ describe("create_booking_hold", () => {
     expect(await repo.listBookings()).toHaveLength(bookingsBefore);
   });
 
+  it("refuses to book in the same turn the guest gives their phone number", async () => {
+    // The model claims the guest confirmed, but the number is in the message being answered,
+    // so the details can't have been read back yet.
+    const justGaveDetails = { ...ctx, latestGuestMessage: "Deluxe please. I'm Sara, my number is 055-123-4567" };
+    const refused = await call("create_booking_hold", validHold, justGaveDetails);
+    expect(refused).toMatchObject({ ok: false, error: "not_confirmed" });
+
+    const arabicDigits = { ...ctx, latestGuestMessage: "اسمي سارة وجوالي ٠٥٥١٢٣٤٥٦٧" };
+    expect(await call("create_booking_hold", validHold, arabicDigits)).toMatchObject({ error: "not_confirmed" });
+
+    const confirmed = { ...ctx, latestGuestMessage: "Yes, all correct, please book it" };
+    expect((await call("create_booking_hold", validHold, confirmed)).ok).toBe(true);
+  });
+
   it("rejects a phone number that cannot be real", async () => {
     const result = await call("create_booking_hold", { ...validHold, phone: "12345" });
     expect(result).toMatchObject({ ok: false, error: "invalid_phone" });

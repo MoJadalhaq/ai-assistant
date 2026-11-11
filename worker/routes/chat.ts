@@ -5,6 +5,7 @@ import { conversationLanguage, runAgent } from "../ai/agent.ts";
 import type { AgentReply } from "../ai/agent.ts";
 import { createGeminiClient, ModelBusyError } from "../ai/gemini.ts";
 import { D1Repository } from "../data/d1-repository.ts";
+import { takeDailyQuota } from "../middleware/daily-quota.ts";
 
 const MAX_MESSAGE_LENGTH = 1000;
 const MAX_TURN_LENGTH = 4000;
@@ -32,12 +33,23 @@ chat.post("/", async (c) => {
     return c.json(failure("not_configured"), 500);
   }
 
-  // 3. Run the tool loop.
-  const { sessionId, message, history } = parsed;
+  // 3. Daily budget, counted only for valid requests that will reach the model.
   const now = new Date();
+  const quota = await takeDailyQuota(
+    c.env.DB,
+    visitor,
+    { perVisitor: c.env.DAILY_MESSAGES_PER_VISITOR, total: c.env.DAILY_MESSAGES_TOTAL },
+    now,
+  );
+  if (!quota.allowed) {
+    return c.json(failure(quota.scope === "visitor" ? "daily_limit" : "demo_quota_used", quota.retryAfterSeconds), 429);
+  }
+
+  // 4. Run the tool loop.
+  const { sessionId, message, history } = parsed;
   try {
     const result = await runAgent({
-      model: createGeminiClient(c.env.GEMINI_API_KEY, c.env.GEMINI_MODEL),
+      model: createGeminiClient(c.env.GEMINI_API_KEY, c.env.GEMINI_MODEL, c.env.GEMINI_THINKING_LEVEL),
       history,
       message,
       ctx: {

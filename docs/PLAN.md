@@ -2,19 +2,26 @@
 
 > Demo project. **Sahil Demo Hotel, Jeddah is fictional.** All names, prices, phone numbers and bookings in this repo are made up.
 
-Status: **Phase 2a (AI core) is done.** Next: Phase 2b (evals and the daily quota cap). This file is the reference for decisions; it is updated when a decision changes.
+Status: **Phase 2 (AI core and evals) is done.** Next: Phase 3 (guest UI and first deploy). This file is the reference for decisions; it is updated when a decision changes.
 
 | Phase | What | Status |
 |---|---|---|
 | 0 | Plan | Done |
 | 1 | Data + tools | Done |
 | 2a | Tool loop, system prompt, `/api/chat`, burst rate limit, terminal chat | Done |
-| 2b | Evals (`evals/cases.json`, `npm run eval`), daily quota cap in D1 | Next |
+| 2b | Evals (`evals/cases.json`, `npm run eval`), daily quota cap in D1, booking-confirmation guard | Done |
+| 3 | Guest UI + first deploy | Next |
 
 **Findings from the first real runs (Phase 2a):**
 - Writing earlier tool results into the history as *text* made the model imitate that text and report a booking it never made, with an invented reference. Earlier tool calls are now replayed as real function-call parts (decision 19). The 2b evals must include a "no booking without a tool call" check.
 - `gemini-3.5-flash-lite` read "الويكند الجاي" as Friday to Sunday despite the prompt's Thursday-to-Saturday rule. An eval case covers it; trying `thinkingLevel: "low"` is the first fix to test.
 - The free-tier model returns 503 "high demand" at times. The adapter retries once, then answers "busy, try again".
+
+**Findings from Phase 2b:**
+- The replayed tool calls work against the real API: a later turn quoted the reference from an earlier turn's tool result.
+- `/api/chat` runs in the Workers runtime as is; `@google/genai` needed no `nodejs_compat` flag.
+- The model booked a room in the same turn the guest gave their phone number, setting `guest_confirmed: true` itself. Fixed in code (decision 20).
+- Eval baseline 20/25: three English cases got Arabic replies, and two dates were read wrongly ("الويكند الجاي" as Friday to Sunday, "next Friday" as the Friday of next week). The prompt now states the reply language detected in code, and the date phrases already worked out. Rerun: 25/25 (single run).
 | 3 | Guest UI + first deploy | |
 | 4 | Staff dashboard, daily reset, optional auth and n8n | |
 | 5 | Voice (stretch) | |
@@ -86,6 +93,9 @@ These findings changed or confirmed parts of the brief.
 16. **`handoff_to_staff` forgives bad arguments** (unknown reason → `other`, unknown urgency → `normal`, one summary copied to both languages). A handoff is the safety net and must not bounce over a formatting detail.
 17. **"The weekend"** means Friday and Saturday (the Saudi weekend). A weekend stay is read as check-in Thursday, check-out Saturday, and the assistant always states the exact dates and gets a yes before holding a room.
 19. **History replays tool calls in Gemini's own format.** Each assistant turn that used tools is sent back as model function calls, then tool results, then the reply. Replayed calls carry the placeholder thought signature Gemini's docs allow for injected calls. The system prompt also says a booking exists only if `create_booking_hold` returned a reference.
+20. **Confirmation is checked in code, not trusted from the model.** `create_booking_hold` refuses when the phone number appears in the guest message being answered: the guest has only just given it, so it can't have been read back yet.
+21. **Daily cap:** `usage_counters` (migration 0002) counts messages per visitor and in total per Riyadh day, with an atomic upsert. A visitor's own counter is checked first, so someone already over their limit can't drain the shared budget. Limits are `vars` in `wrangler.jsonc` (30 per visitor, 150 in total).
+22. **Evals are deterministic.** `evals/checks.ts` grades tool calls and arguments, forbidden tools, reply language, key facts and leaked text, plus a global "no invented booking reference" check. No AI judge, so a score means the same on every run. Overload, quota and network errors are retried and reported as ERROR, not FAIL.
 18. **Fictional data**: sample phone numbers use the obviously fake `+96650000000N` pattern; the knowledge base says outright that the hotel has no real address, phone or email.
 
 ---
@@ -161,8 +171,6 @@ Files marked `(P2)` to `(P6)` don't exist yet; the number is the phase that adds
 │   └── text.ts                   # digit normalization, language detection
 ├── worker/
 │   ├── index.ts                  # Hono app: /api/health for now
-│   ├── routes/                   # (P2) chat.ts  (P4) staff.ts  (P5) voice.ts
-│   ├── ai/                       # (P2) agent.ts, gemini.ts, system-prompt.ts, tool-declarations.ts
 │   ├── tools/
 │   │   ├── index.ts              # tool names → handlers, runTool()
 │   │   ├── tool-types.ts         # ToolContext, ToolResult, fail()
@@ -185,7 +193,9 @@ Files marked `(P2)` to `(P6)` don't exist yet; the number is the phase that adds
 │   │   ├── memory-repository.ts  # in-memory implementation (evals, CLI)
 │   │   ├── repository.contract.ts# one test suite both implementations must pass
 │   │   └── seed.ts               # demo data dated relative to today
-│   ├── middleware/               # (P2) rate-limit.ts  (P4) staff-auth.ts
+│   ├── ai/                       # agent.ts (tool loop), gemini.ts, system-prompt.ts, tool-declarations.ts
+│   ├── routes/chat.ts            # POST /api/chat   (P4) staff.ts  (P5) voice.ts
+│   ├── middleware/               # daily-quota.ts  (P4) staff-auth.ts
 │   └── integrations/             # (P4) n8n.ts
 ├── src/                          # React app
 │   ├── main.tsx, index.css
@@ -199,7 +209,11 @@ Files marked `(P2)` to `(P6)` don't exist yet; the number is the phase that adds
 ├── test/
 │   ├── apply-migrations.ts       # creates the tables before each test file
 │   └── env.d.ts
-└── evals/                        # (P2) cases.json, run.ts, results.md
+└── evals/
+    ├── cases.json                # 25 cases: dialects, dates, booking, handoff, safety
+    ├── checks.ts                 # deterministic grading
+    ├── run.ts                    # npm run eval
+    └── results.md                # written by the last run
 ```
 
 Unit tests sit next to the code they test (`*.test.ts`).

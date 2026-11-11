@@ -27,7 +27,14 @@
 	],
 	"vars": {
 		// Not a secret, so it lives here. `.dev.vars` can override it locally.
-		"GEMINI_MODEL": "gemini-3.5-flash-lite"
+		"GEMINI_MODEL": "gemini-3.5-flash-lite",
+		// MINIMAL, LOW, MEDIUM or HIGH. Empty means the model's default.
+		"GEMINI_THINKING_LEVEL": "",
+		// Daily budget (docs/PLAN.md, decision 10). A guest message costs about 2 to 3 model calls,
+		// so 150 messages is roughly 400 calls. Keep it under the free-tier requests-per-day
+		// shown in AI Studio, minus what the evals use (they share the same key).
+		"DAILY_MESSAGES_PER_VISITOR": 30,
+		"DAILY_MESSAGES_TOTAL": 150
 	},
 	// GEMINI_API_KEY is a secret: `.dev.vars` locally, `npx wrangler secret put GEMINI_API_KEY` in production.
 	"ratelimits": [

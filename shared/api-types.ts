@@ -59,7 +59,14 @@ export interface ChatSuccess {
   toolCalls: ToolCallSummary[];
 }
 
-export type ChatErrorCode = "invalid_request" | "rate_limited" | "model_busy" | "not_configured" | "internal_error";
+export type ChatErrorCode =
+  | "invalid_request"
+  | "rate_limited" // this visitor sent too many messages in the last minute
+  | "daily_limit" // this visitor used their messages for today
+  | "demo_quota_used" // the whole demo used its budget for today
+  | "model_busy" // Gemini is overloaded or out of quota
+  | "not_configured"
+  | "internal_error";
 
 export interface ChatFailure {
   ok: false;

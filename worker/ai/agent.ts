@@ -44,12 +44,13 @@ export interface AgentInput {
 }
 
 export async function runAgent({ model, history, message, ctx }: AgentInput): Promise<AgentReply> {
-  const systemInstruction = buildSystemPrompt(ctx.now);
+  const systemInstruction = buildSystemPrompt(ctx.now, detectLanguage(message));
   const contents: Content[] = [
     ...history.flatMap(toContents),
     { role: "user", parts: [{ text: normalizeDigits(message) }] },
   ];
   const toolCalls: ToolCallRecord[] = [];
+  const toolCtx: ToolContext = { ...ctx, latestGuestMessage: message };
 
   for (let call = 1; call <= MAX_MODEL_CALLS; call++) {
     const turn = await model.generate({ systemInstruction, contents, tools: TOOL_DECLARATIONS });
@@ -68,7 +69,7 @@ export async function runAgent({ model, history, message, ctx }: AgentInput): Pr
     for (const functionCall of turn.functionCalls) {
       const name = functionCall.name ?? "";
       const args = functionCall.args ?? {};
-      const result = await runTool(name, args, ctx);
+      const result = await runTool(name, args, toolCtx);
       toolCalls.push({ name, args, result });
       responses.push({ functionResponse: { id: functionCall.id, name, response: result } });
     }

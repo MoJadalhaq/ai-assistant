@@ -2,7 +2,7 @@
 // ModelClient interface below, so tests can swap in a scripted fake, and the evals can
 // point the same loop at another model.
 
-import { ApiError, GoogleGenAI } from "@google/genai";
+import { ApiError, GoogleGenAI, ThinkingLevel } from "@google/genai";
 import type { Content, FunctionCall, FunctionDeclaration } from "@google/genai";
 
 export interface ModelRequest {
@@ -41,14 +41,26 @@ const OVERLOAD_RETRY_SECONDS = 20;
 /** One quick retry for an overloaded model: those spikes often pass within a second or two. */
 const OVERLOAD_RETRY_DELAY_MS = 1500;
 
-export function createGeminiClient(apiKey: string, model: string): ModelClient {
+/** "low", "LOW" etc. become the SDK's enum value; anything else means "use the model's default". */
+export function parseThinkingLevel(value: string | undefined): ThinkingLevel | undefined {
+  const upper = value?.trim().toUpperCase();
+  return Object.values(ThinkingLevel).find((level) => level === upper && level !== ThinkingLevel.THINKING_LEVEL_UNSPECIFIED);
+}
+
+export function createGeminiClient(apiKey: string, model: string, thinkingLevel?: string): ModelClient {
   const ai = new GoogleGenAI({ apiKey });
+  const level = parseThinkingLevel(thinkingLevel);
 
   async function callOnce({ systemInstruction, contents, tools }: ModelRequest): Promise<ModelTurn> {
     const response = await ai.models.generateContent({
       model,
       contents,
-      config: { systemInstruction, tools: [{ functionDeclarations: tools }] },
+      config: {
+        systemInstruction,
+        tools: [{ functionDeclarations: tools }],
+        // More thinking: better instruction-following, but slower. The evals compare levels.
+        ...(level && { thinkingConfig: { thinkingLevel: level } }),
+      },
     });
 
     const content: Content = response.candidates?.[0]?.content ?? { role: "model", parts: [] };

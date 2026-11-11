@@ -19,7 +19,8 @@
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:seed": "node scripts/seed-local.ts",
     "tool": "node scripts/try-tool.ts",
-    "chat": "node --env-file=.dev.vars scripts/chat-cli.ts"
+    "chat": "node --env-file=.dev.vars scripts/chat-cli.ts",
+    "eval": "node --env-file=.dev.vars evals/run.ts"
   },
   "dependencies": {
     "@google/genai": "^3.1.0",
