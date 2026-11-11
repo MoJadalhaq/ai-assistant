@@ -1,0 +1,32 @@
+/**
+ * Cloudflare Worker configuration.
+ * One Worker serves both the built React app (static assets) and the /api routes.
+ * Docs: https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ai-receptionist",
+	"main": "worker/index.ts",
+	"compatibility_date": "2026-11-10",
+	"assets": {
+		// Unknown paths such as /staff get index.html, so the React app can handle its own pages.
+		"not_found_handling": "single-page-application",
+		// Without this, opening an /api URL in a browser tab counts as page navigation
+		// and would get index.html instead of reaching the Worker.
+		"run_worker_first": ["/api/*"]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "ai-receptionist-db",
+			// Placeholder: local development ignores it. Replaced with the real id
+			// when the database is created on Cloudflare in Phase 3.
+			"database_id": "00000000-0000-0000-0000-000000000000",
+			"migrations_dir": "migrations"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true
+}

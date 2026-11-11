@@ -1,0 +1,3 @@
+# Keep LF line endings in the repo and in working copies on every OS,
+# so diffs stay clean between Windows and the Linux build machines.
+* text=auto eol=lf
