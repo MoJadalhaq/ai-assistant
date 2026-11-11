@@ -25,6 +25,19 @@
 			"migrations_dir": "migrations"
 		}
 	],
+	"vars": {
+		// Not a secret, so it lives here. `.dev.vars` can override it locally.
+		"GEMINI_MODEL": "gemini-3.5-flash-lite"
+	},
+	// GEMINI_API_KEY is a secret: `.dev.vars` locally, `npx wrangler secret put GEMINI_API_KEY` in production.
+	"ratelimits": [
+		{
+			// Burst limit for /api/chat: 6 messages per minute per visitor, counted per Cloudflare location.
+			"name": "CHAT_RATE_LIMITER",
+			"namespace_id": "4101",
+			"simple": { "limit": 6, "period": 60 }
+		}
+	],
 	"observability": {
 		"enabled": true
 	},

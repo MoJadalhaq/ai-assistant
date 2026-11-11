@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { HOTEL_NAME_EN } from "./data/hotel-kb.ts";
 import { riyadhToday } from "./domain/dates.ts";
+import { chat } from "./routes/chat.ts";
 
 // `Env` is generated from wrangler.jsonc by `npm run cf-typegen`. It lists the bindings (here: DB).
 const app = new Hono<{ Bindings: Env }>();
@@ -19,6 +20,8 @@ app.get("/api/health", async (c) => {
     );
   }
 });
+
+app.route("/api/chat", chat);
 
 // Any other /api path gets a JSON 404, so an API client never receives the React page by mistake.
 app.all("/api/*", (c) => c.json({ ok: false, error: "not_found" }, 404));

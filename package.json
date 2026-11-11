@@ -18,9 +18,11 @@
     "test:watch": "vitest",
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:seed": "node scripts/seed-local.ts",
-    "tool": "node scripts/try-tool.ts"
+    "tool": "node scripts/try-tool.ts",
+    "chat": "node --env-file=.dev.vars scripts/chat-cli.ts"
   },
   "dependencies": {
+    "@google/genai": "^3.1.0",
     "hono": "^4.13.17",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

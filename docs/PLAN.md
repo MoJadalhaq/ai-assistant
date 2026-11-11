@@ -2,13 +2,19 @@
 
 > Demo project. **Sahil Demo Hotel, Jeddah is fictional.** All names, prices, phone numbers and bookings in this repo are made up.
 
-Status: **Phase 1 (data + tools) is done.** Next: Phase 2 (AI core). This file is the reference for decisions; it is updated when a decision changes.
+Status: **Phase 2a (AI core) is done.** Next: Phase 2b (evals and the daily quota cap). This file is the reference for decisions; it is updated when a decision changes.
 
 | Phase | What | Status |
 |---|---|---|
 | 0 | Plan | Done |
 | 1 | Data + tools | Done |
-| 2 | AI core (chat endpoint, system prompt, rate limiting, CLI, evals) | Next |
+| 2a | Tool loop, system prompt, `/api/chat`, burst rate limit, terminal chat | Done |
+| 2b | Evals (`evals/cases.json`, `npm run eval`), daily quota cap in D1 | Next |
+
+**Findings from the first real runs (Phase 2a):**
+- Writing earlier tool results into the history as *text* made the model imitate that text and report a booking it never made, with an invented reference. Earlier tool calls are now replayed as real function-call parts (decision 19). The 2b evals must include a "no booking without a tool call" check.
+- `gemini-3.5-flash-lite` read "الويكند الجاي" as Friday to Sunday despite the prompt's Thursday-to-Saturday rule. An eval case covers it; trying `thinkingLevel: "low"` is the first fix to test.
+- The free-tier model returns 503 "high demand" at times. The adapter retries once, then answers "busy, try again".
 | 3 | Guest UI + first deploy | |
 | 4 | Staff dashboard, daily reset, optional auth and n8n | |
 | 5 | Voice (stretch) | |
@@ -79,6 +85,7 @@ These findings changed or confirmed parts of the brief.
 15. **The guest's language is detected in code** (`detectLanguage`), not reported by the model, and stored on bookings and tickets.
 16. **`handoff_to_staff` forgives bad arguments** (unknown reason → `other`, unknown urgency → `normal`, one summary copied to both languages). A handoff is the safety net and must not bounce over a formatting detail.
 17. **"The weekend"** means Friday and Saturday (the Saudi weekend). A weekend stay is read as check-in Thursday, check-out Saturday, and the assistant always states the exact dates and gets a yes before holding a room.
+19. **History replays tool calls in Gemini's own format.** Each assistant turn that used tools is sent back as model function calls, then tool results, then the reply. Replayed calls carry the placeholder thought signature Gemini's docs allow for injected calls. The system prompt also says a booking exists only if `create_booking_hold` returned a reference.
 18. **Fictional data**: sample phone numbers use the obviously fake `+96650000000N` pattern; the knowledge base says outright that the hotel has no real address, phone or email.
 
 ---

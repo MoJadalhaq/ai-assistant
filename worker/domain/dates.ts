@@ -19,7 +19,13 @@ export function riyadhToday(now: Date): string {
   return shifted.toISOString().slice(0, 10);
 }
 
-const ISO_DATE_SHAPE = /^\d{4}-\d{2}-\d{2}$/;
+/** Time of day in Riyadh, 'HH:MM'. */
+export function riyadhClock(now: Date): string {
+  const shifted = new Date(now.getTime() + RIYADH_UTC_OFFSET_HOURS * MS_PER_HOUR);
+  return shifted.toISOString().slice(11, 16);
+}
+
+const ISO_DATE_SHAPE =/^\d{4}-\d{2}-\d{2}$/;
 
 /** True only for a real calendar date written as 'YYYY-MM-DD'. */
 export function isIsoDate(value: string): boolean {
