@@ -2,6 +2,8 @@
 
 > **Demo, fictional hotel.** "Sahil Demo Hotel, Jeddah" does not exist. Every name, price, phone number and booking in this repository is made up.
 
+**Live demo:** [reception.jadalhaq.com](https://reception.jadalhaq.com) · staff dashboard: [reception.jadalhaq.com/staff](https://reception.jadalhaq.com/staff)
+
 An AI receptionist for a hotel in Jeddah that chats with guests in Saudi dialect (Hijazi, Najdi), formal Arabic, English, or a mix of them in one sentence. It answers questions from the hotel's knowledge base, checks which rooms are free, creates booking holds, and hands difficult conversations to staff with a summary in both languages. Staff see bookings and handoffs arrive on a live dashboard.
 
 <p align="center">
@@ -107,6 +109,8 @@ npm run db:seed:remote
 npx wrangler secret put GEMINI_API_KEY
 npm run deploy
 ```
+
+Before deploying, change `routes` in `wrangler.jsonc` to a domain on your own Cloudflare account, or remove it and set `"workers_dev": true` to use a free `*.workers.dev` address.
 
 To deploy on every push instead, connect the GitHub repository under the Worker's Settings → Builds, with `npm run build` as the build command and `npx wrangler deploy` as the deploy command. Optionally, set `N8N_WEBHOOK_URL` to get every handoff in n8n ([payload](docs/handoff-webhook.md)).
 

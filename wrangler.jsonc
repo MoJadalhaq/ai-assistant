@@ -8,6 +8,11 @@
 	"name": "ai-receptionist",
 	"main": "worker/index.ts",
 	"compatibility_date": "2026-11-10",
+	// Custom domain: Cloudflare creates the DNS record and HTTPS certificate on deploy.
+	"routes": [{ "pattern": "reception.jadalhaq.com", "custom_domain": true }],
+	// The *.workers.dev address is off, so the demo is only served from the custom domain.
+	"workers_dev": false,
+	"preview_urls": false,
 	"assets": {
 		// Unknown paths such as /staff get index.html, so the React app can handle its own pages.
 		"not_found_handling": "single-page-application",
