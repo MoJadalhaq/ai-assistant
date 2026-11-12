@@ -19,10 +19,23 @@ export function Bubble({ from, children }: { from: "guest" | "assistant"; childr
  * dir="auto" lets the browser pick the direction from the message's first letter, so an Arabic
  * reply reads right-to-left even in the English UI, and "أبغى room for 2" lays out correctly.
  */
+// Booking references (SDH-N24Z) and dates (2026-11-19) are kept in one piece: browsers may otherwise
+// wrap at a hyphen, and inside Arabic text the halves then land on different lines in the wrong order.
+const UNBREAKABLE = /(SDH-[A-Z0-9]{4}|[0-9]{4}-[0-9]{2}-[0-9]{2})/;
+
 export function MessageText({ text }: { text: string }) {
   return (
     <p dir="auto" className="text-start leading-relaxed break-words whitespace-pre-wrap">
-      {text}
+      {text.split(UNBREAKABLE).map((part, index) =>
+        // split() with a capture group puts the matches at the odd positions.
+        index % 2 === 1 ? (
+          <bdi key={index} dir="ltr" className={`whitespace-nowrap ${part.startsWith("SDH-") ? "font-mono font-semibold" : ""}`}>
+            {part}
+          </bdi>
+        ) : (
+          part
+        ),
+      )}
     </p>
   );
 }

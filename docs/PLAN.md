@@ -2,7 +2,7 @@
 
 > Demo project. **Sahil Demo Hotel, Jeddah is fictional.** All names, prices, phone numbers and bookings in this repo are made up.
 
-Status: **Phase 4 is done: the staff dashboard, the nightly reset and the optional handoff webhook are live. Firebase sign-in was left out for now (decision 23). Phase 5 (voice, stretch) or Phase 6 (README, architecture) is next.** This file is the reference for decisions; it is updated when a decision changes.
+Status: **Phase 4 is done: the staff dashboard, the nightly reset and the optional handoff webhook are live. Firebase sign-in was left out for now (decision 23). Phase 6 is done too: README with screenshots and a diagram, ARCHITECTURE.md, and the demo-video script (docs/DEMO-VIDEO-SCRIPT.md). Phase 5 (voice, stretch) is optional and not started.** This file is the reference for decisions; it is updated when a decision changes.
 
 | Phase | What | Status |
 |---|---|---|
@@ -12,6 +12,8 @@ Status: **Phase 4 is done: the staff dashboard, the nightly reset and the option
 | 2b | Evals (`evals/cases.json`, `npm run eval`), daily quota cap in D1, booking-confirmation guard | Done |
 | 3 | Guest UI + first deploy (D1 database created in Cloudflare, migrations applied, demo data loaded, Worker deployed) | Done |
 | 4 | Staff dashboard (`/staff`, polling, resolve, reset), nightly reset cron, masked phones, n8n webhook (docs/handoff-webhook.md) | Done |
+| 5 | Voice notes (stretch): costs nothing extra on the free tier, but uses more of the daily quota | Not started |
+| 6 | README (screenshots, Mermaid diagram, what I'd build next), ARCHITECTURE.md, demo-video script; booking references and dates no longer wrap mid-word in chat bubbles | Done |
 
 **Findings from the first real runs (Phase 2a):**
 - Writing earlier tool results into the history as *text* made the model imitate that text and report a booking it never made, with an invented reference. Earlier tool calls are now replayed as real function-call parts (decision 19). The 2b evals must include a "no booking without a tool call" check.
