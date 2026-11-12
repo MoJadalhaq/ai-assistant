@@ -1,4 +1,6 @@
-// The /api/chat contract between the browser and the Worker.
+// The /api contract between the browser and the Worker: the guest chat and the staff dashboard.
+
+import type { Booking, Ticket } from "./types.ts";
 
 /** One message in the conversation the browser keeps and sends back each time (the server stores no chat state). */
 export interface ChatTurn {
@@ -77,3 +79,49 @@ export interface ChatFailure {
 }
 
 export type ChatResponse = ChatSuccess | ChatFailure;
+
+// ---- Staff dashboard (/api/staff) ----
+
+/** A booking as the dashboard sees it: no chat session id, and the phone number partly hidden. */
+export interface StaffBooking extends Omit<Booking, "sessionId"> {
+  /** True when a guest made it through the chat; false for the seeded sample bookings. */
+  fromChat: boolean;
+}
+
+export interface StaffTicket extends Omit<Ticket, "sessionId"> {
+  fromChat: boolean;
+}
+
+export interface StaffRoomName {
+  code: string;
+  nameEn: string;
+  nameAr: string;
+}
+
+export interface StaffOverview {
+  ok: true;
+  /** Today in Riyadh, 'YYYY-MM-DD'. */
+  today: string;
+  rooms: StaffRoomName[];
+  /** Newest first, at most 100 of each. */
+  bookings: StaffBooking[];
+  tickets: StaffTicket[];
+}
+
+export interface ResolveTicketSuccess {
+  ok: true;
+  ticket: StaffTicket;
+}
+
+export interface ResetDemoSuccess {
+  ok: true;
+  today: string;
+}
+
+export type StaffErrorCode = "rate_limited" | "not_found" | "invalid_request" | "internal_error";
+
+export interface StaffFailure {
+  ok: false;
+  error: StaffErrorCode;
+  retryAfterSeconds?: number;
+}

@@ -1,4 +1,4 @@
-import type { Language } from "../../shared/types.ts";
+import type { Language, Ticket } from "../../shared/types.ts";
 import type { HotelRepository } from "../data/repository.ts";
 
 /** Everything a tool needs from the outside world. Nothing is read from globals, so tools are easy to test. */
@@ -12,6 +12,8 @@ export interface ToolContext {
   language: Language;
   /** The guest message being answered. create_booking_hold uses it to check that the details were read back first. */
   latestGuestMessage?: string;
+  /** Called after a handoff ticket is stored. The chat route uses it for the optional n8n webhook. */
+  onTicketCreated?: (ticket: Ticket) => void;
   /** Tests replace this to force a reference-code clash. */
   newReferenceCode?: () => string;
 }

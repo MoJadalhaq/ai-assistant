@@ -292,6 +292,14 @@ describe("handoff_to_staff", () => {
     guest_details: { name: "Sara Ahmed", phone: "0551234567", booking_reference: "SDH-M8YC" },
   };
 
+  it("reports the stored ticket to onTicketCreated (used for the n8n webhook)", async () => {
+    const reported: number[] = [];
+    await call("handoff_to_staff", validHandoff, { ...ctx, onTicketCreated: (ticket) => reported.push(ticket.id) });
+
+    const [stored] = await repo.listTickets();
+    expect(reported).toEqual([stored?.id]);
+  });
+
   it("opens a ticket with the summary in both languages", async () => {
     const result = await call("handoff_to_staff", validHandoff, { ...ctx, language: "ar" });
 

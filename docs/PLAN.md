@@ -2,7 +2,7 @@
 
 > Demo project. **Sahil Demo Hotel, Jeddah is fictional.** All names, prices, phone numbers and bookings in this repo are made up.
 
-Status: **Phase 3 is done: the guest chat page is live on Cloudflare Workers. The staff dashboard (Phase 4) is next.** This file is the reference for decisions; it is updated when a decision changes.
+Status: **Phase 4 is done: the staff dashboard, the nightly reset and the optional handoff webhook are live. Firebase sign-in was left out for now (decision 23). Phase 5 (voice, stretch) or Phase 6 (README, architecture) is next.** This file is the reference for decisions; it is updated when a decision changes.
 
 | Phase | What | Status |
 |---|---|---|
@@ -11,6 +11,7 @@ Status: **Phase 3 is done: the guest chat page is live on Cloudflare Workers. Th
 | 2a | Tool loop, system prompt, `/api/chat`, burst rate limit, terminal chat | Done |
 | 2b | Evals (`evals/cases.json`, `npm run eval`), daily quota cap in D1, booking-confirmation guard | Done |
 | 3 | Guest UI + first deploy (D1 database created in Cloudflare, migrations applied, demo data loaded, Worker deployed) | Done |
+| 4 | Staff dashboard (`/staff`, polling, resolve, reset), nightly reset cron, masked phones, n8n webhook (docs/handoff-webhook.md) | Done |
 
 **Findings from the first real runs (Phase 2a):**
 - Writing earlier tool results into the history as *text* made the model imitate that text and report a booking it never made, with an invented reference. Earlier tool calls are now replayed as real function-call parts (decision 19). The 2b evals must include a "no booking without a tool call" check.
@@ -97,6 +98,8 @@ These findings changed or confirmed parts of the brief.
 21. **Daily cap:** `usage_counters` (migration 0002) counts messages per visitor and in total per Riyadh day, with an atomic upsert. A visitor's own counter is checked first, so someone already over their limit can't drain the shared budget. Limits are `vars` in `wrangler.jsonc` (30 per visitor, 150 in total).
 22. **Evals are deterministic.** `evals/checks.ts` grades tool calls and arguments, forbidden tools, reply language, key facts and leaked text, plus a global "no invented booking reference" check. No AI judge, so a score means the same on every run. Overload, quota and network errors are retried and reported as ERROR, not FAIL.
 18. **Fictional data**: sample phone numbers use the obviously fake `+96650000000N` pattern; the knowledge base says outright that the hotel has no real address, phone or email.
+23. **No staff sign-in yet.** Firebase Auth would need a Firebase project and two dependencies, and in demo mode every visitor must be able to see the dashboard anyway. Instead the dashboard is public and safe to be: phone numbers are masked on the server, including numbers the AI copies into its summaries (`maskPhonesInText`), chat session ids are never sent, and the two actions that change data are rate-limited per visitor. Sign-in can be added later to reveal full numbers to staff.
+24. **One reset for the cron and the button.** `resetDemo()` reseeds the hotel and deletes message counters from earlier days only, so pressing "Reset demo" can't hand out a fresh daily AI budget.
 
 ---
 

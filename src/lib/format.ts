@@ -15,6 +15,19 @@ export function formatDate(date: string, language: UiLanguage): string {
   return format.format(new Date(`${date}T00:00:00Z`));
 }
 
+/** A UTC timestamp shown in hotel time: "12 Nov, 14:05" or "12 نوفمبر، 14:05". */
+export function formatDateTime(iso: string, language: UiLanguage): string {
+  const format = new Intl.DateTimeFormat(LOCALES[language], {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+    timeZone: "Asia/Riyadh",
+  });
+  return format.format(new Date(iso));
+}
+
 export function formatAmount(amount: number, language: UiLanguage): string {
   return new Intl.NumberFormat(LOCALES[language], { maximumFractionDigits: 2 }).format(amount);
 }

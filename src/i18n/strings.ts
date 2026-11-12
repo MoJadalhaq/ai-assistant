@@ -1,8 +1,9 @@
 // Every piece of UI text, in English and Arabic. A typed object instead of an i18n library:
 // two languages and one screen don't need more, and TypeScript flags any missing translation.
 
-import type { Urgency } from "../../shared/types.ts";
+import type { BookingStatus, HandoffReason, TicketStatus, Urgency } from "../../shared/types.ts";
 import type { ClientErrorCode } from "../api/client.ts";
+import type { StaffClientError } from "../api/staff-client.ts";
 
 export type UiLanguage = "ar" | "en";
 
@@ -56,8 +57,52 @@ const en = {
   } satisfies Record<ClientErrorCode, string>,
   retry: "Try again",
   currency: "SAR",
-  staffSoon: "The staff dashboard is coming soon.",
-  backToChat: "Back to the chat",
+  openDashboard: "Open the staff dashboard ↗",
+  staff: {
+    label: "Staff dashboard",
+    openDashboard: "Open the staff dashboard",
+    openChat: "Open the guest chat",
+    demoNotice:
+      "Demo mode: this page is public, so phone numbers are partly hidden. All data resets every night at 03:00 Riyadh time.",
+    reset: "Reset demo",
+    resetting: "Resetting…",
+    confirmReset: "Put the demo hotel back to its starting data? Bookings and tickets made since the last reset will be deleted.",
+    resetDone: "Demo data restored.",
+    tickets: "Handoff tickets",
+    bookings: "Bookings",
+    openCount: (count: number) => `${count} open`,
+    live: "Live · updates every 5 seconds",
+    offline: "Couldn't load the latest data. Retrying…",
+    loading: "Loading…",
+    emptyTickets: "No tickets yet. Ask for a manager in the guest chat and one will appear here.",
+    emptyBookings: "No bookings yet.",
+    isNew: "New",
+    fromChat: "From chat",
+    sample: "Sample data",
+    guest: "Guest",
+    booking: "Booking",
+    resolve: "Mark resolved",
+    saving: "Saving…",
+    resolvedAt: (time: string) => `Resolved ${time}`,
+    reasons: {
+      human_request: "Asked for a person",
+      complaint: "Complaint",
+      out_of_scope: "Outside the assistant's scope",
+      group_booking: "Group booking",
+      special_pricing: "Special pricing",
+      medical_or_accessibility: "Medical or accessibility",
+      other: "Other",
+    } satisfies Record<HandoffReason, string>,
+    ticketStatus: { open: "Open", resolved: "Resolved" } satisfies Record<TicketStatus, string>,
+    bookingStatus: { hold: "Hold", confirmed: "Confirmed", cancelled: "Cancelled" } satisfies Record<BookingStatus, string>,
+    errors: {
+      rate_limited: "Too many changes at once. Please wait a minute and try again.",
+      not_found: "That ticket no longer exists. The demo may have been reset.",
+      invalid_request: "That request couldn't be carried out.",
+      internal_error: "Something went wrong on our side. Please try again.",
+      network_error: "Couldn't reach the server. Check your connection and try again.",
+    } satisfies Record<StaffClientError, string>,
+  },
 };
 
 type Strings = typeof en;
@@ -104,8 +149,52 @@ const ar: Strings = {
   },
   retry: "حاول مرة ثانية",
   currency: "ريال",
-  staffSoon: "لوحة الموظفين قريباً.",
-  backToChat: "الرجوع للمحادثة",
+  openDashboard: "فتح لوحة الموظفين ↗",
+  staff: {
+    label: "لوحة الموظفين",
+    openDashboard: "فتح لوحة الموظفين",
+    openChat: "فتح محادثة الضيوف",
+    demoNotice:
+      "وضع العرض التجريبي: هذه الصفحة عامة، لذلك أرقام الجوال مخفية جزئياً. كل البيانات ترجع لوضعها الأصلي كل ليلة الساعة 3:00 فجراً بتوقيت الرياض.",
+    reset: "إعادة ضبط العرض",
+    resetting: "جاري إعادة الضبط…",
+    confirmReset: "إعادة الفندق التجريبي إلى بياناته الأصلية؟ سيتم حذف الحجوزات والطلبات التي أُنشئت بعد آخر إعادة ضبط.",
+    resetDone: "تمت استعادة بيانات العرض.",
+    tickets: "طلبات التحويل للموظفين",
+    bookings: "الحجوزات",
+    openCount: (count: number) => `${count} مفتوحة`,
+    live: "مباشر · تتحدّث كل 5 ثوانٍ",
+    offline: "تعذّر تحميل آخر البيانات. نحاول مرة أخرى…",
+    loading: "جاري التحميل…",
+    emptyTickets: "لا توجد طلبات بعد. اطلب مديراً في محادثة الضيوف وسيظهر الطلب هنا.",
+    emptyBookings: "لا توجد حجوزات بعد.",
+    isNew: "جديد",
+    fromChat: "من المحادثة",
+    sample: "بيانات تجريبية",
+    guest: "الضيف",
+    booking: "الحجز",
+    resolve: "إغلاق الطلب",
+    saving: "جاري الحفظ…",
+    resolvedAt: (time: string) => `أُغلق ${time}`,
+    reasons: {
+      human_request: "طلب التحدث مع موظف",
+      complaint: "شكوى",
+      out_of_scope: "خارج نطاق المساعد",
+      group_booking: "حجز مجموعة",
+      special_pricing: "سعر خاص",
+      medical_or_accessibility: "احتياج طبي أو سهولة وصول",
+      other: "أخرى",
+    },
+    ticketStatus: { open: "مفتوح", resolved: "مغلق" },
+    bookingStatus: { hold: "حجز مبدئي", confirmed: "مؤكد", cancelled: "ملغي" },
+    errors: {
+      rate_limited: "تغييرات كثيرة بسرعة. انتظر دقيقة ثم حاول مرة أخرى.",
+      not_found: "هذا الطلب لم يعد موجوداً. ربما تمت إعادة ضبط العرض.",
+      invalid_request: "تعذّر تنفيذ الطلب.",
+      internal_error: "حدث خطأ من جهتنا. حاول مرة أخرى.",
+      network_error: "تعذّر الوصول للخادم. تحقق من الاتصال وحاول مرة أخرى.",
+    },
+  },
 };
 
 export const STRINGS: Record<UiLanguage, Strings> = { en, ar };

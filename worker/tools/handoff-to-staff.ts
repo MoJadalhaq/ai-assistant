@@ -48,6 +48,7 @@ export async function handoffToStaff(rawArgs: unknown, ctx: ToolContext): Promis
     language: ctx.language,
     createdAt: ctx.now.toISOString(),
   });
+  ctx.onTicketCreated?.(ticket);
 
   return {
     ok: true,

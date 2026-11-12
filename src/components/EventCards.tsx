@@ -37,6 +37,7 @@ function BookingCard({ booking }: { booking: Booking }) {
         </span>
       </p>
       <p className="mt-3 border-t border-teal-200 pt-2 text-xs text-slate-600">{t.booking.note}</p>
+      <DashboardLink />
     </section>
   );
 }
@@ -61,6 +62,22 @@ function TicketCard({ ticket }: { ticket: Ticket }) {
         </span>
       </div>
       <p className="mt-2 text-xs text-slate-600">{t.ticket.note}</p>
+      <DashboardLink />
     </section>
+  );
+}
+
+/** Lets a demo visitor see the other side: the same booking or ticket arriving on the staff dashboard. */
+function DashboardLink() {
+  const t = useStrings();
+  return (
+    <a
+      href="/staff"
+      target="_blank"
+      rel="noopener"
+      className="mt-2 inline-block text-xs font-medium text-teal-700 underline underline-offset-2"
+    >
+      {t.openDashboard}
+    </a>
   );
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizePhone } from "./phone.ts";
+import { maskPhone, maskPhonesInText, normalizePhone } from "./phone.ts";
 
 describe("normalizePhone", () => {
   it.each([
@@ -34,5 +34,36 @@ describe("normalizePhone", () => {
     [""],
   ])("rejects %s", (given) => {
     expect(normalizePhone(given)).toBeNull();
+  });
+});
+
+describe("maskPhone", () => {
+  it("keeps the country code, the first digit and the last three digits", () => {
+    expect(maskPhone("+966512345678")).toBe("+9665•••••678");
+    expect(maskPhone("+447700900123")).toBe("+4477•••••123");
+  });
+
+  it("hides most of a number kept as the guest typed it", () => {
+    expect(maskPhone("0551234567")).toBe("055••••567");
+  });
+
+  it("hides anything too short to be a phone number completely", () => {
+    expect(maskPhone("12345")).toBe("•••••");
+  });
+});
+
+describe("maskPhonesInText", () => {
+  it("masks a number the AI copied into a summary", () => {
+    expect(maskPhonesInText("Guest Omar (0551112233) wants the manager.")).toBe("Guest Omar (055••••233) wants the manager.");
+  });
+
+  it("masks numbers written with spaces, a country code or Arabic digits", () => {
+    expect(maskPhonesInText("call +966 55 111 2233")).toBe("call +9665•••••233");
+    expect(maskPhonesInText("رقمه ٠٥٥١١١٢٢٣٣")).toBe("رقمه 055••••233");
+  });
+
+  it("leaves dates, prices, counts and booking references alone", () => {
+    const text = "6 rooms from 2026-11-20 2026-11-22, 1380 SAR, booking SDH-M8YC";
+    expect(maskPhonesInText(text)).toBe(text);
   });
 });

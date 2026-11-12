@@ -26,6 +26,9 @@ export type CreateHoldResult =
 
 export type NewTicket = Omit<Ticket, "id" | "status" | "resolvedAt">;
 
+/** The staff dashboard shows the most recent rows only, so a busy demo day can't make every refresh slow. */
+export const LIST_LIMIT = 100;
+
 export interface SeedData {
   rooms: Room[];
   bookings: Omit<Booking, "id">[];
@@ -46,9 +49,15 @@ export interface HotelRepository {
 
   createTicket(ticket: NewTicket): Promise<Ticket>;
 
-  /** Newest first. */
+  /** Newest first, at most LIST_LIMIT. */
   listBookings(): Promise<Booking[]>;
   listTickets(): Promise<Ticket[]>;
+
+  /**
+   * Marks a ticket as handled. Resolving it again keeps the first resolvedAt.
+   * Returns null when there is no ticket with that id.
+   */
+  resolveTicket(id: number, resolvedAt: string): Promise<Ticket | null>;
 
   /** Wipes everything and loads the given data. Used by the seed script and the daily reset. */
   replaceAllData(seed: SeedData): Promise<void>;

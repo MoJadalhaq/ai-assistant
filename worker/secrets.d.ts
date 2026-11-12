@@ -3,4 +3,6 @@
 
 interface Env {
   GEMINI_API_KEY: string;
+  /** Optional: where to send handoff notifications (worker/integrations/n8n.ts). Empty or unset turns them off. */
+  N8N_WEBHOOK_URL: string;
 }

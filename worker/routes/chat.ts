@@ -5,6 +5,7 @@ import { conversationLanguage, runAgent } from "../ai/agent.ts";
 import type { AgentReply } from "../ai/agent.ts";
 import { createGeminiClient, ModelBusyError } from "../ai/gemini.ts";
 import { D1Repository } from "../data/d1-repository.ts";
+import { buildHandoffPayload, sendHandoffWebhook } from "../integrations/n8n.ts";
 import { takeDailyQuota } from "../middleware/daily-quota.ts";
 
 const MAX_MESSAGE_LENGTH = 1000;
@@ -47,6 +48,8 @@ chat.post("/", async (c) => {
 
   // 4. Run the tool loop.
   const { sessionId, message, history } = parsed;
+  const webhookUrl = c.env.N8N_WEBHOOK_URL;
+  const origin = new URL(c.req.url).origin;
   try {
     const result = await runAgent({
       model: createGeminiClient(c.env.GEMINI_API_KEY, c.env.GEMINI_MODEL, c.env.GEMINI_THINKING_LEVEL),
@@ -57,6 +60,10 @@ chat.post("/", async (c) => {
         now,
         sessionId,
         language: conversationLanguage(history, message),
+        // The webhook is sent after the reply, like the logging below.
+        onTicketCreated: webhookUrl
+          ? (ticket) => c.executionCtx.waitUntil(sendHandoffWebhook(webhookUrl, buildHandoffPayload(ticket, origin, now)))
+          : undefined,
       },
     });
 

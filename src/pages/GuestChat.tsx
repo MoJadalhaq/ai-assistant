@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 import { Composer } from "../components/Composer.tsx";
-import { Header } from "../components/Header.tsx";
+import { Header, NewChatButton, PageLink } from "../components/Header.tsx";
 import { Bubble, MessageItem, MessageText, TypingIndicator } from "../components/Messages.tsx";
 import { STARTER_PROMPTS } from "../i18n/strings.ts";
 import { useChatStore } from "../store/chat-store.ts";
 import { useStrings } from "../store/ui-store.ts";
 
 export function GuestChat() {
+  const t = useStrings();
   const messages = useChatStore((state) => state.messages);
   const pending = useChatStore((state) => state.pending);
   const end = useRef<HTMLDivElement>(null);
@@ -19,7 +20,10 @@ export function GuestChat() {
   return (
     // h-dvh, not h-screen: on phones the browser bars come and go, and dvh follows them.
     <div className="flex h-dvh flex-col bg-slate-50">
-      <Header />
+      <Header>
+        <NewChatButton />
+        <PageLink href="/staff" label={t.staff.openDashboard} icon="staff" />
+      </Header>
       <main className="flex-1 overflow-y-auto">
         <div className="mx-auto flex max-w-2xl flex-col gap-3 px-4 py-4" aria-live="polite">
           {messages.length === 0 ? <Welcome /> : messages.map((message) => <MessageItem key={message.id} message={message} />)}

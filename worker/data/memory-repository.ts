@@ -9,6 +9,7 @@ import type {
   RoomAvailability,
   SeedData,
 } from "./repository.ts";
+import { LIST_LIMIT } from "./repository.ts";
 
 /**
  * The hotel's data in plain arrays. Nothing is saved anywhere.
@@ -59,11 +60,19 @@ export class MemoryRepository implements HotelRepository {
   }
 
   async listBookings(): Promise<Booking[]> {
-    return [...this.bookings].sort(newestFirst);
+    return [...this.bookings].sort(newestFirst).slice(0, LIST_LIMIT);
   }
 
   async listTickets(): Promise<Ticket[]> {
-    return [...this.tickets].sort(newestFirst);
+    return [...this.tickets].sort(newestFirst).slice(0, LIST_LIMIT);
+  }
+
+  async resolveTicket(id: number, resolvedAt: string): Promise<Ticket | null> {
+    const ticket = this.tickets.find((item) => item.id === id);
+    if (!ticket) return null;
+    ticket.status = "resolved";
+    ticket.resolvedAt ??= resolvedAt;
+    return { ...ticket };
   }
 
   async replaceAllData(seed: SeedData): Promise<void> {

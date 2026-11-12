@@ -236,6 +236,21 @@ export function describeRepositoryContract(name: string, createRepository: () =>
         const tickets = await repo.listTickets();
         expect(tickets.map((entry) => entry.id)).toEqual([second.id, first.id]);
       });
+
+      it("resolves a ticket and keeps the time of the first resolve", async () => {
+        const created = await repo.createTicket(ticket());
+
+        const resolved = await repo.resolveTicket(created.id, "2026-11-11T10:00:00.000Z");
+        const again = await repo.resolveTicket(created.id, "2026-11-11T11:00:00.000Z");
+
+        expect(resolved).toMatchObject({ id: created.id, status: "resolved", resolvedAt: "2026-11-11T10:00:00.000Z" });
+        expect(again?.resolvedAt).toBe("2026-11-11T10:00:00.000Z");
+        expect((await repo.listTickets())[0]?.status).toBe("resolved");
+      });
+
+      it("returns null when resolving a ticket that doesn't exist", async () => {
+        expect(await repo.resolveTicket(999, CREATED_AT)).toBeNull();
+      });
     });
 
     describe("replaceAllData", () => {

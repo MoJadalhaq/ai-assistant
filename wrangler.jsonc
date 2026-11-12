@@ -45,6 +45,10 @@
 			"simple": { "limit": 6, "period": 60 }
 		}
 	],
+	// Daily demo reset at 00:00 UTC (03:00 in Riyadh). Cron Triggers always run on UTC.
+	"triggers": {
+		"crons": ["0 0 * * *"]
+	},
 	"observability": {
 		"enabled": true
 	},

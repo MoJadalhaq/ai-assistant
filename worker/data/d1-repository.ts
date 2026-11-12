@@ -17,6 +17,7 @@ import type {
   RoomAvailability,
   SeedData,
 } from "./repository.ts";
+import { LIST_LIMIT } from "./repository.ts";
 
 // ---------------------------------------------------------------------------------------------
 // SQL
@@ -258,13 +259,22 @@ export class D1Repository implements HotelRepository {
   }
 
   async listBookings(): Promise<Booking[]> {
-    const { results } = await this.db.prepare("SELECT * FROM bookings ORDER BY id DESC").all<BookingRow>();
+    const { results } = await this.db.prepare("SELECT * FROM bookings ORDER BY id DESC LIMIT ?").bind(LIST_LIMIT).all<BookingRow>();
     return results.map(toBooking);
   }
 
   async listTickets(): Promise<Ticket[]> {
-    const { results } = await this.db.prepare("SELECT * FROM tickets ORDER BY id DESC").all<TicketRow>();
+    const { results } = await this.db.prepare("SELECT * FROM tickets ORDER BY id DESC LIMIT ?").bind(LIST_LIMIT).all<TicketRow>();
     return results.map(toTicket);
+  }
+
+  async resolveTicket(id: number, resolvedAt: string): Promise<Ticket | null> {
+    // COALESCE keeps the time of the first resolve if two staff members click at once.
+    const row = await this.db
+      .prepare("UPDATE tickets SET status = 'resolved', resolved_at = COALESCE(resolved_at, ?2) WHERE id = ?1 RETURNING *")
+      .bind(id, resolvedAt)
+      .first<TicketRow>();
+    return row ? toTicket(row) : null;
   }
 
   async replaceAllData(seed: SeedData): Promise<void> {

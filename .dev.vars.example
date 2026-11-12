@@ -7,3 +7,7 @@ GEMINI_API_KEY=
 
 # Which Gemini model the assistant uses.
 GEMINI_MODEL=gemini-3.5-flash-lite
+
+# Optional: webhook that receives every handoff ticket (n8n or similar). Leave empty to turn it off.
+# Payload: docs/handoff-webhook.md
+N8N_WEBHOOK_URL=

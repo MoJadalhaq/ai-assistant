@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 import { describe, expect, it } from "vitest";
 import { D1Repository } from "./data/d1-repository.ts";
 import { ROOM_TYPES } from "./data/hotel-kb.ts";
-import app from "./index.ts";
+import { app } from "./index.ts";
 
 describe("GET /api/health", () => {
   it("reports that the API and the database are up", async () => {
