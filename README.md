@@ -147,3 +147,7 @@ docs/                Plan and decision log, webhook payload, demo-video script
 ## License
 
 MIT, see [LICENSE](LICENSE). The hotel, its guests and all the data are fictional.
+
+## Author
+
+Built by Mohammed Jadalhaq: [jadalhaq.com](https://jadalhaq.com) · [GitHub](https://github.com/MoJadalhaq) · [LinkedIn](https://www.linkedin.com/in/mohammedjadalhaq/)

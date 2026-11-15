@@ -5,6 +5,7 @@ import type { Urgency } from "../../shared/types.ts";
 import type { StaffClientError } from "../api/staff-client.ts";
 import { fetchOverview, resetDemoData, resolveTicket } from "../api/staff-client.ts";
 import { AboutButton } from "../components/AboutDialog.tsx";
+import { Credit } from "../components/Credit.tsx";
 import { Header, PageLink } from "../components/Header.tsx";
 import { ConversationView } from "../components/staff/ConversationView.tsx";
 import { FreeRoomsGrid } from "../components/staff/FreeRoomsGrid.tsx";
@@ -107,6 +108,8 @@ export function StaffDashboard() {
             <FreeRoomsGrid overview={overview} />
           )}
         </section>
+
+        <Credit className="mt-10 text-center text-xs text-slate-500" />
       </main>
     </div>
   );

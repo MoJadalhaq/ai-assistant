@@ -1,5 +1,6 @@
 import { useId, useRef } from "react";
 import { useStrings } from "../store/ui-store.ts";
+import { Credit } from "./Credit.tsx";
 
 const REPO_URL = "https://github.com/MoJadalhaq/ai-assistant";
 const ARCHITECTURE_URL = `${REPO_URL}/blob/main/ARCHITECTURE.md`;
@@ -55,7 +56,9 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
           <h3 className="mt-4 font-semibold text-slate-900">{t.about.builtTitle}</h3>
           <p className="mt-1 leading-relaxed">{t.about.built}</p>
 
-          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Credit className="mt-4 border-t border-slate-200 pt-3 text-slate-600" />
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
             <a href={REPO_URL} target="_blank" rel="noopener" className="font-medium text-teal-700 underline underline-offset-2">
               {t.about.github}
             </a>

@@ -78,6 +78,7 @@ const en = {
     dashboard: "Staff dashboard",
     close: "Close",
   },
+  credit: { builtBy: "Built by", name: "Mohammed Jadalhaq" },
   openDashboard: "Open the staff dashboard ↗",
   staff: {
     label: "Staff dashboard",
@@ -218,6 +219,7 @@ const ar: Strings = {
     dashboard: "لوحة الموظفين",
     close: "إغلاق",
   },
+  credit: { builtBy: "من تطوير", name: "Mohammed Jadalhaq" },
   openDashboard: "فتح لوحة الموظفين ↗",
   staff: {
     label: "لوحة الموظفين",
