@@ -20,7 +20,7 @@ An AI receptionist for a hotel in Jeddah that chats with guests in Saudi dialect
 - **Answers only from the hotel's data.** Hotel facts come from a bilingual knowledge base through a tool, never from the model's imagination.
 - **Books carefully.** It checks real availability, reads every detail back, and creates a hold only after the guest says yes. No payment is taken.
 - **Knows when to stop.** Complaints, requests for a person, group bookings and anything outside its job go to staff as a ticket with a reason, an urgency and a summary in both languages.
-- **Gives staff a live view.** `/staff` shows tickets and bookings, refreshes every 5 seconds, marks new arrivals, and lets staff resolve tickets. Phone numbers are masked because the demo dashboard is public.
+- **Gives staff a live view.** `/staff` refreshes every 5 seconds and marks new arrivals. It shows the day's key numbers, handoff tickets with the full conversation behind each one (including which tools the AI used), bookings, and a 14-night grid of free rooms per room type. Phone numbers are masked because the demo dashboard is public.
 - **Looks after itself.** Rate limits and daily caps keep it on free tiers, and the demo data resets every night.
 
 ## How it works
@@ -78,7 +78,7 @@ npm run eval -- --model=gemini-3.8-flash --thinking=low --out=evals/results-3.8.
 | Back end | One Cloudflare Worker with Hono, serving the app and `/api`. |
 | Data | Cloudflare D1 (SQLite), a Cron Trigger for the nightly reset. |
 | AI | Google Gemini through `@google/genai`, with function calling. Free tier. |
-| Tests | Vitest with `@cloudflare/vitest-plugin`: 193 tests, including the data layer against real D1 in the Workers runtime. |
+| Tests | Vitest with `@cloudflare/vitest-plugin`: 197 tests, including the data layer against real D1 in the Workers runtime. |
 
 ## Run it locally
 
@@ -123,7 +123,6 @@ To deploy on every push instead, connect the GitHub repository under the Worker'
 
 - **Staff sign-in** (Firebase Auth or Cloudflare Access), so staff see full phone numbers and every resolve is attributed to a person.
 - **WhatsApp as a channel.** Most Saudi guests would rather message a hotel on WhatsApp than open a website; the tool loop doesn't care where the message comes from.
-- **The conversation behind each ticket**, shown on the dashboard so staff don't have to ask the guest to repeat themselves.
 - **Voice notes**, sent to Gemini as audio, with spoken replies through the browser's speech synthesis.
 - **Real systems behind the tools:** a property-management system for rooms and rates, and a payment link to turn a hold into a confirmed booking.
 - **Evals in CI**, run several times per case to measure stability, with more dialects (Gulf, Egyptian, Levantine) and harder multi-turn cases.

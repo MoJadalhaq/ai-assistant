@@ -28,6 +28,20 @@ export function formatDateTime(iso: string, language: UiLanguage): string {
   return format.format(new Date(iso));
 }
 
+/** The Riyadh calendar date of a UTC timestamp. Riyadh is UTC+3 all year (no daylight saving). */
+export function riyadhDate(iso: string): string {
+  return new Date(Date.parse(iso) + 3 * 3600_000).toISOString().slice(0, 10);
+}
+
+/** Column header for the free-rooms grid: "Thu" over "12", or "الخميس" over "12". */
+export function formatNightHeader(date: string, language: UiLanguage): { weekday: string; day: string } {
+  const at = new Date(`${date}T00:00:00Z`);
+  return {
+    weekday: new Intl.DateTimeFormat(LOCALES[language], { weekday: "short", timeZone: "UTC" }).format(at),
+    day: new Intl.DateTimeFormat(LOCALES[language], { day: "numeric", timeZone: "UTC" }).format(at),
+  };
+}
+
 export function formatAmount(amount: number, language: UiLanguage): string {
   return new Intl.NumberFormat(LOCALES[language], { maximumFractionDigits: 2 }).format(amount);
 }

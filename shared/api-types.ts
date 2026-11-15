@@ -92,17 +92,40 @@ export interface StaffTicket extends Omit<Ticket, "sessionId"> {
   fromChat: boolean;
 }
 
-export interface StaffRoomName {
+/** A room type with the rooms free on each night of the dashboard's grid. */
+export interface StaffRoom {
   code: string;
   nameEn: string;
   nameAr: string;
+  totalUnits: number;
+  /** One entry per night in StaffOverview.nights. */
+  freeByNight: number[];
+}
+
+/** One message of the chat behind a ticket. */
+export interface TranscriptMessage {
+  role: "guest" | "assistant";
+  /** Phone numbers are masked. */
+  text: string;
+  /** UTC, ISO 8601. */
+  at: string;
+  /** Tools the assistant used before this reply (names only). */
+  tools: string[];
+}
+
+export interface TicketConversationSuccess {
+  ok: true;
+  messages: TranscriptMessage[];
 }
 
 export interface StaffOverview {
   ok: true;
   /** Today in Riyadh, 'YYYY-MM-DD'. */
   today: string;
-  rooms: StaffRoomName[];
+  /** The next 14 nights, starting tonight: 'YYYY-MM-DD'. */
+  nights: string[];
+  /** Cheapest first. */
+  rooms: StaffRoom[];
   /** Newest first, at most 100 of each. */
   bookings: StaffBooking[];
   tickets: StaffTicket[];

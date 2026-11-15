@@ -58,6 +58,11 @@ describe("GET /api/staff/overview", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect(body.rooms).toHaveLength(ROOM_TYPES.length);
+    expect(body.nights).toHaveLength(14);
+    expect(body.nights[0]).toBe(body.today);
+    // The test booking (deluxe-sea, 20th to 22nd) is outside or inside the grid depending on today,
+    // so only the shape is checked here; the counting rule is covered by the repository contract.
+    expect(body.rooms.every((room) => room.freeByNight.length === 14)).toBe(true);
     expect(body.bookings[0]).toMatchObject({ referenceCode: "SDH-TEST", phone: "+9665•••••678", fromChat: true });
     expect(body.tickets[0]).toMatchObject({ reason: "complaint", phone: "+9665•••••678", fromChat: false });
   });
@@ -93,6 +98,54 @@ describe("POST /api/staff/tickets/:id/resolve", () => {
     expect(missing.status).toBe(404);
     expect(await missing.json()).toEqual({ ok: false, error: "not_found" });
     expect(malformed.status).toBe(400);
+  });
+});
+
+describe("GET /api/staff/tickets/:id/conversation", () => {
+  it("returns the chat behind a ticket, with tool names and masked phone numbers", async () => {
+    const ticket = await repo.createTicket({
+      sessionId: "session-chat",
+      reason: "human_request",
+      urgency: "normal",
+      summaryEn: "Wants a person.",
+      summaryAr: "يبغى موظف.",
+      guestName: null,
+      phone: null,
+      bookingReference: null,
+      language: "en",
+      createdAt: "2026-11-12T09:00:00.000Z",
+    });
+    const insert = env.DB.prepare(
+      "INSERT INTO conversations (session_id, role, content, language, created_at) VALUES ('session-chat', ?, ?, NULL, '2026-11-12T09:00:00.000Z')",
+    );
+    await env.DB.batch([
+      insert.bind("user", "Manager please, call me on 0551112233"),
+      insert.bind("tool", JSON.stringify([{ name: "handoff_to_staff", args: { phone: "0551112233" }, result: { ok: true } }])),
+      insert.bind("assistant", "I've passed this to the team."),
+    ]);
+
+    const response = await app.request(`/api/staff/tickets/${ticket.id}/conversation`, {}, env);
+    const text = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(text).not.toContain("1112233");
+    expect(JSON.parse(text)).toEqual({
+      ok: true,
+      messages: [
+        { role: "guest", text: "Manager please, call me on 055••••233", at: "2026-11-12T09:00:00.000Z", tools: [] },
+        { role: "assistant", text: "I've passed this to the team.", at: "2026-11-12T09:00:00.000Z", tools: ["handoff_to_staff"] },
+      ],
+    });
+  });
+
+  it("is empty for a sample ticket and 404 for an unknown one", async () => {
+    const sample = await openTicket();
+
+    const empty = await app.request(`/api/staff/tickets/${sample.id}/conversation`, {}, env);
+    const missing = await app.request("/api/staff/tickets/999/conversation", {}, env);
+
+    expect(await empty.json()).toEqual({ ok: true, messages: [] });
+    expect(missing.status).toBe(404);
   });
 });
 

@@ -1,7 +1,7 @@
 // Every piece of UI text, in English and Arabic. A typed object instead of an i18n library:
 // two languages and one screen don't need more, and TypeScript flags any missing translation.
 
-import type { BookingStatus, HandoffReason, TicketStatus, Urgency } from "../../shared/types.ts";
+import type { BookingStatus, HandoffReason, Language, TicketStatus, Urgency } from "../../shared/types.ts";
 import type { ClientErrorCode } from "../api/client.ts";
 import type { StaffClientError } from "../api/staff-client.ts";
 
@@ -89,7 +89,7 @@ const en = {
     resetting: "Resetting…",
     confirmReset: "Put the demo hotel back to its starting data? Bookings and tickets made since the last reset will be deleted.",
     resetDone: "Demo data restored.",
-    tickets: "Handoff tickets",
+    tickets: "Tickets",
     bookings: "Bookings",
     openCount: (count: number) => `${count} open`,
     live: "Live · updates every 5 seconds",
@@ -105,6 +105,33 @@ const en = {
     resolve: "Mark resolved",
     saving: "Saving…",
     resolvedAt: (time: string) => `Resolved ${time}`,
+    freeRooms: "Free rooms",
+    stats: {
+      openTickets: "Open tickets",
+      highPriority: (count: number) => `${count} high priority`,
+      holdsToday: "Holds from chat today",
+      freeTonight: "Rooms free tonight",
+      ofTotal: (total: number) => `of ${total}`,
+      chatLanguages: "Chat requests by language",
+      languages: { ar: "Arabic", en: "English", mixed: "Mixed" } satisfies Record<Language, string>,
+      none: "None yet",
+    },
+    grid: {
+      caption: "Rooms free each night for the next 14 days. Weekend nights (Thursday and Friday) are shaded.",
+      room: "Room type",
+      soldOut: "Sold out",
+      few: "Few left",
+      available: "Available",
+    },
+    conversation: {
+      show: "Show conversation",
+      hide: "Hide conversation",
+      loading: "Loading the conversation…",
+      empty: "No messages were saved for this chat.",
+      guest: "Guest",
+      assistant: "AI receptionist",
+      used: "Used:",
+    },
     reasons: {
       human_request: "Asked for a person",
       complaint: "Complaint",
@@ -202,7 +229,7 @@ const ar: Strings = {
     resetting: "جاري إعادة الضبط…",
     confirmReset: "إعادة الفندق التجريبي إلى بياناته الأصلية؟ سيتم حذف الحجوزات والطلبات التي أُنشئت بعد آخر إعادة ضبط.",
     resetDone: "تمت استعادة بيانات العرض.",
-    tickets: "طلبات التحويل للموظفين",
+    tickets: "الطلبات",
     bookings: "الحجوزات",
     openCount: (count: number) => `${count} مفتوحة`,
     live: "مباشر · تتحدّث كل 5 ثوانٍ",
@@ -218,6 +245,33 @@ const ar: Strings = {
     resolve: "إغلاق الطلب",
     saving: "جاري الحفظ…",
     resolvedAt: (time: string) => `أُغلق ${time}`,
+    freeRooms: "الغرف المتاحة",
+    stats: {
+      openTickets: "طلبات مفتوحة",
+      highPriority: (count: number) => `${count} أولوية عالية`,
+      holdsToday: "حجوزات من المحادثة اليوم",
+      freeTonight: "غرف متاحة الليلة",
+      ofTotal: (total: number) => `من ${total}`,
+      chatLanguages: "طلبات المحادثة حسب اللغة",
+      languages: { ar: "عربي", en: "إنجليزي", mixed: "مختلط" },
+      none: "لا يوجد بعد",
+    },
+    grid: {
+      caption: "عدد الغرف المتاحة كل ليلة خلال الأيام الـ 14 القادمة. ليالي نهاية الأسبوع (الخميس والجمعة) مظللة.",
+      room: "نوع الغرفة",
+      soldOut: "محجوز بالكامل",
+      few: "متبقي القليل",
+      available: "متاح",
+    },
+    conversation: {
+      show: "عرض المحادثة",
+      hide: "إخفاء المحادثة",
+      loading: "جاري تحميل المحادثة…",
+      empty: "لم تُحفظ رسائل لهذه المحادثة.",
+      guest: "الضيف",
+      assistant: "موظف الاستقبال الذكي",
+      used: "استخدم:",
+    },
     reasons: {
       human_request: "طلب التحدث مع موظف",
       complaint: "شكوى",

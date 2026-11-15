@@ -3,6 +3,7 @@ import type {
   ResolveTicketSuccess,
   StaffErrorCode,
   StaffOverview,
+  TicketConversationSuccess,
 } from "../../shared/api-types.ts";
 
 export type StaffClientError = StaffErrorCode | "network_error";
@@ -28,6 +29,10 @@ export function fetchOverview() {
 
 export function resolveTicket(id: number) {
   return request<ResolveTicketSuccess>(`/api/staff/tickets/${id}/resolve`, { method: "POST" });
+}
+
+export function fetchConversation(ticketId: number) {
+  return request<TicketConversationSuccess>(`/api/staff/tickets/${ticketId}/conversation`);
 }
 
 export function resetDemoData() {

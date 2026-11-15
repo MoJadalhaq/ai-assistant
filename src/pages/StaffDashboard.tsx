@@ -6,13 +6,16 @@ import type { StaffClientError } from "../api/staff-client.ts";
 import { fetchOverview, resetDemoData, resolveTicket } from "../api/staff-client.ts";
 import { AboutButton } from "../components/AboutDialog.tsx";
 import { Header, PageLink } from "../components/Header.tsx";
+import { ConversationView } from "../components/staff/ConversationView.tsx";
+import { FreeRoomsGrid } from "../components/staff/FreeRoomsGrid.tsx";
+import { StatsRow } from "../components/staff/StatsRow.tsx";
 import { formatAmount, formatDate, formatDateTime } from "../lib/format.ts";
 import { useStrings, useUiStore } from "../store/ui-store.ts";
 
 /** How often the dashboard asks for new data. Polling, not WebSockets: simpler, and 5 s is quick enough for a demo. */
 const POLL_MS = 5000;
 
-type Tab = "tickets" | "bookings";
+type Tab = "tickets" | "bookings" | "rooms";
 
 export function StaffDashboard() {
   const t = useStrings();
@@ -61,8 +64,14 @@ export function StaffDashboard() {
           </p>
         )}
 
+        {overview && (
+          <div className="mt-4">
+            <StatsRow overview={overview} />
+          </div>
+        )}
+
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-          <div role="tablist" className="flex gap-1 rounded-xl bg-slate-200/70 p-1">
+          <div role="tablist" className="flex max-w-full gap-1 overflow-x-auto rounded-xl bg-slate-200/70 p-1">
             <TabButton active={tab === "tickets"} onClick={() => setTab("tickets")}>
               {t.staff.tickets}
               {openTickets > 0 && (
@@ -71,6 +80,9 @@ export function StaffDashboard() {
             </TabButton>
             <TabButton active={tab === "bookings"} onClick={() => setTab("bookings")}>
               {t.staff.bookings} <span className="text-slate-500">({overview?.bookings.length ?? 0})</span>
+            </TabButton>
+            <TabButton active={tab === "rooms"} onClick={() => setTab("rooms")}>
+              {t.staff.freeRooms}
             </TabButton>
           </div>
           <p className={`text-xs ${offline ? "text-red-700" : "text-slate-500"}`} aria-live="polite">
@@ -89,8 +101,10 @@ export function StaffDashboard() {
               onResolved={refresh}
               onError={(error) => setNotice({ text: t.staff.errors[error], error: true })}
             />
-          ) : (
+          ) : tab === "bookings" ? (
             <BookingList overview={overview} isNew={isNew} />
+          ) : (
+            <FreeRoomsGrid overview={overview} />
           )}
         </section>
       </main>
@@ -156,7 +170,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`rounded-lg px-3 py-1.5 text-sm font-medium ${active ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
+      className={`rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap sm:px-3 ${active ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
     >
       {children}
     </button>
@@ -208,6 +222,7 @@ function TicketItem({
   const t = useStrings();
   const language = useUiStore((state) => state.language);
   const [saving, setSaving] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const resolved = ticket.status === "resolved";
   // The summary in the page's language first; the other one below for a colleague who reads the other language.
   const [mainSummary, otherSummary] = language === "ar" ? [ticket.summaryAr, ticket.summaryEn] : [ticket.summaryEn, ticket.summaryAr];
@@ -256,6 +271,20 @@ function TicketItem({
           </Detail>
         )}
       </dl>
+
+      {ticket.fromChat && (
+        <>
+          <button
+            type="button"
+            onClick={() => setShowChat(!showChat)}
+            aria-expanded={showChat}
+            className="mt-2 text-sm font-medium text-teal-700 underline underline-offset-2 hover:text-teal-900"
+          >
+            {showChat ? t.staff.conversation.hide : t.staff.conversation.show}
+          </button>
+          {showChat && <ConversationView ticketId={ticket.id} />}
+        </>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2 text-xs text-slate-500">
         <span>{formatDateTime(ticket.createdAt, language)}</span>

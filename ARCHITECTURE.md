@@ -121,7 +121,18 @@ That is made safe on the server, not in the page:
 - The reset never clears today's message counters, so it can't hand out a new AI budget.
 
 The page polls every 5 seconds, only while its tab is visible, and reads at most 100 rows of each
-kind. A staff sign-in (Firebase or Cloudflare Access) is the obvious next step for a real hotel.
+kind. One request returns everything the page shows:
+
+- **Stats** (open tickets, holds made in the chat today, rooms free tonight, guest languages) are
+  worked out in the browser from that same response.
+- **The free-rooms grid** comes from one SQL query: every room type × the next 14 nights, minus the
+  rooms booked on each night. It is the per-night version of the availability rule the tools use,
+  and the same contract tests check it in D1 and in memory.
+- **The conversation behind a ticket** is loaded only when staff open it
+  (`GET /api/staff/tickets/:id/conversation`). Each chat turn is logged with the tool calls, so the
+  transcript shows which tools the AI used before each reply, by name only: their arguments
+  contain guest details.
+ A staff sign-in (Firebase or Cloudflare Access) is the obvious next step for a real hotel.
 
 The optional n8n webhook gets the full ticket, phone included, because it goes to the hotel's own
 systems. It is sent after the reply with `waitUntil` and can't slow down or break the chat.

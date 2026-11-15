@@ -1,11 +1,12 @@
 import type { Booking, Room, Ticket } from "../../shared/types.ts";
-import { unitsLeftForStay } from "../domain/availability.ts";
+import { nightsOfStay, unitsBookedOnNight, unitsLeftForStay } from "../domain/availability.ts";
 import type { BookedStay, Stay } from "../domain/availability.ts";
 import type {
   CreateHoldResult,
   HotelRepository,
   NewBookingHold,
   NewTicket,
+  NightlyAvailability,
   RoomAvailability,
   SeedData,
 } from "./repository.ts";
@@ -57,6 +58,15 @@ export class MemoryRepository implements HotelRepository {
     const created: Ticket = { ...ticket, id: this.nextTicketId++, status: "open", resolvedAt: null };
     this.tickets.push(created);
     return created;
+  }
+
+  async listNightlyAvailability(period: Stay): Promise<NightlyAvailability[]> {
+    const nights = nightsOfStay(period);
+    const rooms = await this.listRooms();
+    return rooms.map((room) => ({
+      room,
+      freeByNight: nights.map((night) => room.totalUnits - unitsBookedOnNight(this.activeBookingsOf(room.code), night)),
+    }));
   }
 
   async listBookings(): Promise<Booking[]> {

@@ -14,6 +14,7 @@ import type {
   HotelRepository,
   NewBookingHold,
   NewTicket,
+  NightlyAvailability,
   RoomAvailability,
   SeedData,
 } from "./repository.ts";
@@ -53,6 +54,17 @@ const AVAILABILITY_SQL = `
   JOIN booked ON booked.room_code = r.code
   GROUP BY r.code
   ORDER BY r.nightly_rate_halalas`;
+
+// Rooms free per room type and night, for the staff dashboard's 14-day grid.
+// Same rule as above, but per night instead of the busiest night of a stay.
+const NIGHTLY_AVAILABILITY_SQL = `
+  WITH RECURSIVE ${NIGHTS_OF_STAY}
+  SELECT r.code AS room_code, n.night, r.total_units - COALESCE(SUM(b.rooms), 0) AS units_free
+  FROM rooms r
+  CROSS JOIN nights n
+  LEFT JOIN bookings b ON b.room_code = r.code AND ${BOOKING_OCCUPIES_NIGHT}
+  GROUP BY r.code, n.night
+  ORDER BY n.night`;
 
 // Check and insert in ONE statement.
 //
@@ -256,6 +268,21 @@ export class D1Repository implements HotelRepository {
       .bind(...ticketValues({ ...ticket, status: "open", resolvedAt: null }))
       .run();
     return { ...ticket, id: meta.last_row_id, status: "open", resolvedAt: null };
+  }
+
+  async listNightlyAvailability(period: Stay): Promise<NightlyAvailability[]> {
+    const [rooms, { results }] = await Promise.all([
+      this.listRooms(),
+      this.db
+        .prepare(NIGHTLY_AVAILABILITY_SQL)
+        .bind(period.checkIn, period.checkOut)
+        .all<{ room_code: string; night: string; units_free: number }>(),
+    ]);
+    // The rows are in night order, so each room's list comes out in date order too.
+    return rooms.map((room) => ({
+      room,
+      freeByNight: results.filter((row) => row.room_code === room.code).map((row) => row.units_free),
+    }));
   }
 
   async listBookings(): Promise<Booking[]> {

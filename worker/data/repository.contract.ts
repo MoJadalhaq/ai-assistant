@@ -77,6 +77,27 @@ export function describeRepositoryContract(name: string, createRepository: () =>
       });
     });
 
+    describe("nightly availability", () => {
+      it("counts the rooms free on each night, ignoring cancelled bookings", async () => {
+        await repo.replaceAllData({
+          rooms: ROOM_TYPES,
+          bookings: [
+            // Two suites on the night of the 12th, one on the 13th; the cancelled one doesn't count.
+            existingBooking({ referenceCode: "SDH-AAA2", checkIn: "2026-11-12", checkOut: "2026-11-14", nights: 2 }),
+            existingBooking({ referenceCode: "SDH-AAA3", checkIn: "2026-11-12", checkOut: "2026-11-13", nights: 1 }),
+            existingBooking({ referenceCode: "SDH-AAA4", checkIn: "2026-11-13", checkOut: "2026-11-14", nights: 1, status: "cancelled" }),
+          ],
+          tickets: [],
+        });
+
+        const nightly = await repo.listNightlyAvailability({ checkIn: "2026-11-11", checkOut: "2026-11-15" });
+
+        expect(nightly.map((entry) => entry.room.code)).toEqual(["standard-city", "deluxe-sea", "family-room", "executive-suite"]);
+        expect(nightly[0]?.freeByNight).toEqual([8, 8, 8, 8]);
+        expect(nightly[3]?.freeByNight).toEqual([SUITE_UNITS, 0, 1, SUITE_UNITS]);
+      });
+    });
+
     describe("availability", () => {
       it("shows every room as free when nothing is booked", async () => {
         const availability = await repo.listAvailability(THU_TO_SAT);

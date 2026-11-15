@@ -13,26 +13,43 @@ import type {
   StaffFailure,
   StaffOverview,
   StaffTicket,
+  TicketConversationSuccess,
 } from "../../shared/api-types.ts";
 import type { Booking, Ticket } from "../../shared/types.ts";
+import { readTicketConversation } from "../data/conversations.ts";
 import { D1Repository } from "../data/d1-repository.ts";
 import { resetDemo } from "../data/reset-demo.ts";
-import { riyadhToday } from "../domain/dates.ts";
+import { addDays, riyadhToday } from "../domain/dates.ts";
 import { maskPhone, maskPhonesInText } from "../domain/phone.ts";
 
 const RETRY_SECONDS = 60;
+/** How many nights the free-rooms grid shows. */
+const GRID_NIGHTS = 14;
 
 export const staff = new Hono<{ Bindings: Env }>();
 
 // Read-only, polled every few seconds by the dashboard. Not rate-limited: polling would trip it.
 staff.get("/overview", async (c) => {
   const repo = new D1Repository(c.env.DB);
-  const [rooms, bookings, tickets] = await Promise.all([repo.listRooms(), repo.listBookings(), repo.listTickets()]);
+  const today = riyadhToday(new Date());
+  const grid = { checkIn: today, checkOut: addDays(today, GRID_NIGHTS) };
+  const [nightly, bookings, tickets] = await Promise.all([
+    repo.listNightlyAvailability(grid),
+    repo.listBookings(),
+    repo.listTickets(),
+  ]);
 
   const body: StaffOverview = {
     ok: true,
-    today: riyadhToday(new Date()),
-    rooms: rooms.map(({ code, nameEn, nameAr }) => ({ code, nameEn, nameAr })),
+    today,
+    nights: Array.from({ length: GRID_NIGHTS }, (_, index) => addDays(today, index)),
+    rooms: nightly.map(({ room, freeByNight }) => ({
+      code: room.code,
+      nameEn: room.nameEn,
+      nameAr: room.nameAr,
+      totalUnits: room.totalUnits,
+      freeByNight,
+    })),
     bookings: bookings.map(toStaffBooking),
     tickets: tickets.map(toStaffTicket),
   };
@@ -53,6 +70,18 @@ staff.post("/tickets/:id/resolve", async (c) => {
   if (!ticket) return c.json(failure("not_found"), 404);
 
   const body: ResolveTicketSuccess = { ok: true, ticket: toStaffTicket(ticket) };
+  return c.json(body);
+});
+
+// The chat that led to a ticket. Read-only, fetched when staff open it, so not rate-limited.
+staff.get("/tickets/:id/conversation", async (c) => {
+  const id = c.req.param("id");
+  if (!/^\d{1,9}$/.test(id)) return c.json(failure("invalid_request"), 400);
+
+  const messages = await readTicketConversation(c.env.DB, Number(id));
+  if (messages === null) return c.json(failure("not_found"), 404);
+
+  const body: TicketConversationSuccess = { ok: true, messages };
   return c.json(body);
 });
 

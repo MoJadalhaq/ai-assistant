@@ -14,6 +14,13 @@ export interface RoomAvailability {
   unitsLeft: number;
 }
 
+/** One room type with the number of rooms free on each night of a period (for the staff grid). */
+export interface NightlyAvailability {
+  room: Room;
+  /** Rooms free on each night, in date order, one entry per night from checkIn up to (not including) checkOut. */
+  freeByNight: number[];
+}
+
 /** Everything about a hold except what the database decides (id) or is always the same (status). */
 export type NewBookingHold = Omit<Booking, "id" | "status">;
 
@@ -46,6 +53,9 @@ export interface HotelRepository {
    * The check and the insert must happen as one step, so two guests can't both get the last room.
    */
   createBookingHold(hold: NewBookingHold): Promise<CreateHoldResult>;
+
+  /** Every room type (cheapest first) with the rooms free on each night of the period. Used by the staff dashboard. */
+  listNightlyAvailability(period: Stay): Promise<NightlyAvailability[]>;
 
   createTicket(ticket: NewTicket): Promise<Ticket>;
 
