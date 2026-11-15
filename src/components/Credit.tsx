@@ -4,7 +4,7 @@ const AUTHOR_SITE = "https://jadalhaq.com";
 const AUTHOR_GITHUB = "https://github.com/MoJadalhaq";
 const AUTHOR_LINKEDIN = "https://www.linkedin.com/in/mohammedjadalhaq/";
 
-const LINK = "font-medium text-teal-700 underline-offset-2 transition-colors hover:text-teal-900 hover:underline";
+const LINK = "font-medium text-teal-700 dark:text-teal-300 underline-offset-2 transition-colors hover:text-teal-900 dark:hover:text-teal-200 hover:underline";
 
 /** "Built by Mohammed Jadalhaq · GitHub · LinkedIn": who made the demo, for visitors from a CV or portfolio. */
 export function Credit({ className = "" }: { className?: string }) {

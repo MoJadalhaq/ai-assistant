@@ -30,7 +30,7 @@ export function StatsRow({ overview }: { overview: StaffOverview }) {
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       <Stat label={t.staff.stats.openTickets} value={open.length}>
-        {highPriority > 0 && <span className="text-red-700">{t.staff.stats.highPriority(highPriority)}</span>}
+        {highPriority > 0 && <span className="text-red-700 dark:text-red-300">{t.staff.stats.highPriority(highPriority)}</span>}
       </Stat>
       <Stat label={t.staff.stats.holdsToday} value={holdsToday} />
       <Stat label={t.staff.stats.freeTonight} value={freeTonight}>
@@ -47,7 +47,7 @@ export function StatsRow({ overview }: { overview: StaffOverview }) {
 
 function Stat({ label, value, children }: { label: string; value?: number; children?: ReactNode }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-3">
+    <div className="rounded-xl border border-slate-200 bg-surface p-3">
       <p className="text-xs text-slate-500">{label}</p>
       {value !== undefined && <p className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-slate-900 tabular-nums">{value}</p>}
       {children && <p className={`text-xs text-slate-600 ${value === undefined ? "mt-2 text-sm" : ""}`}>{children}</p>}

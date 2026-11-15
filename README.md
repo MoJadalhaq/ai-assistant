@@ -74,7 +74,7 @@ npm run eval -- --model=gemini-3.8-flash --thinking=low --out=evals/results-3.8.
 
 | Part | Choice |
 |---|---|
-| Front end | React, TypeScript, Vite, Tailwind CSS, Zustand. Full right-to-left support with an Arabic/English switch, mobile first. |
+| Front end | React, TypeScript, Vite, Tailwind CSS, Zustand. Full right-to-left support with an Arabic/English switch, light and dark themes, mobile first. |
 | Back end | One Cloudflare Worker with Hono, serving the app and `/api`. |
 | Data | Cloudflare D1 (SQLite), a Cron Trigger for the nightly reset. |
 | AI | Google Gemini through `@google/genai`, with function calling. Free tier. |

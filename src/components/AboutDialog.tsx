@@ -20,7 +20,7 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
       <button
         type="button"
         onClick={() => dialog.current?.showModal()}
-        className={`font-medium text-teal-700 underline underline-offset-2 transition-colors hover:text-teal-900 ${className}`}
+        className={`font-medium text-teal-700 dark:text-teal-300 underline underline-offset-2 transition-colors hover:text-teal-900 dark:hover:text-teal-200 ${className}`}
       >
         {t.about.open}
       </button>
@@ -31,7 +31,7 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
         ref={dialog}
         aria-labelledby={titleId}
         onClick={(event) => event.target === dialog.current && close()}
-        className="about-dialog m-auto w-[min(32rem,calc(100%-2rem))] rounded-2xl p-0 text-start text-sm text-slate-700 shadow-xl"
+        className="about-dialog m-auto bg-surface w-[min(32rem,calc(100%-2rem))] rounded-2xl p-0 text-start text-sm text-slate-700 shadow-xl"
       >
         <div className="max-h-[85dvh] overflow-y-auto p-5">
           <h2 id={titleId} className="text-lg font-semibold text-slate-900">
@@ -45,7 +45,7 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
               <li key={item.text}>
                 {item.text}
                 {item.example && (
-                  <bdi dir="auto" className="mt-1 block rounded-lg bg-teal-50 px-2.5 py-1.5 text-teal-900">
+                  <bdi dir="auto" className="mt-1 block rounded-lg bg-teal-50 dark:bg-teal-950/50 px-2.5 py-1.5 text-teal-900 dark:text-teal-100">
                     {item.example}
                   </bdi>
                 )}
@@ -59,14 +59,14 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
           <Credit className="mt-4 border-t border-slate-200 pt-3 text-slate-600" />
 
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <a href={REPO_URL} target="_blank" rel="noopener" className="font-medium text-teal-700 underline underline-offset-2">
+            <a href={REPO_URL} target="_blank" rel="noopener" className="font-medium text-teal-700 dark:text-teal-300 underline underline-offset-2">
               {t.about.github}
             </a>
-            <a href={ARCHITECTURE_URL} target="_blank" rel="noopener" className="font-medium text-teal-700 underline underline-offset-2">
+            <a href={ARCHITECTURE_URL} target="_blank" rel="noopener" className="font-medium text-teal-700 dark:text-teal-300 underline underline-offset-2">
               {t.about.architecture}
             </a>
             {showDashboardLink && (
-              <a href="/staff" className="font-medium text-teal-700 underline underline-offset-2">
+              <a href="/staff" className="font-medium text-teal-700 dark:text-teal-300 underline underline-offset-2">
                 {t.about.dashboard}
               </a>
             )}

@@ -33,7 +33,7 @@ export function Composer() {
   }
 
   return (
-    <footer className="border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)]">
+    <footer className="border-t border-slate-200 bg-surface pb-[env(safe-area-inset-bottom)]">
       <form onSubmit={submit} className="mx-auto flex max-w-2xl items-end gap-2 px-4 pt-3 pb-1">
         <textarea
           ref={input}
@@ -48,7 +48,7 @@ export function Composer() {
             grow(event.target);
           }}
           onKeyDown={onKeyDown}
-          className="min-h-11 flex-1 resize-none rounded-2xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-base leading-snug text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-white focus:outline-none"
+          className="min-h-11 flex-1 resize-none rounded-2xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-base leading-snug text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:bg-surface focus:outline-none"
         />
         <button
           type="submit"

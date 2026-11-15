@@ -20,8 +20,8 @@ function BookingCard({ booking }: { booking: Booking }) {
   ];
 
   return (
-    <section className="w-full max-w-sm self-start rounded-2xl border border-teal-200 bg-teal-50 p-4 text-slate-800 origin-top tabular-nums transition-[opacity,scale] duration-300 ease-out starting:scale-[0.96] starting:opacity-0">
-      <h2 className="text-sm font-semibold text-teal-800">✓ {t.booking.title}</h2>
+    <section className="w-full max-w-sm self-start rounded-2xl border border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-teal-950/50 p-4 text-slate-800 origin-top tabular-nums transition-[opacity,scale] duration-300 ease-out starting:scale-[0.96] starting:opacity-0">
+      <h2 className="text-sm font-semibold text-teal-800 dark:text-teal-200">✓ {t.booking.title}</h2>
       <p className="mt-2 text-xs text-slate-500">{t.booking.reference}</p>
       <p dir="ltr" className="text-start font-mono text-2xl font-semibold tracking-wider text-slate-900">
         {booking.reference_code}
@@ -36,15 +36,15 @@ function BookingCard({ booking }: { booking: Booking }) {
           ({t.booking.vatIncluded(`${formatAmount(booking.vat_included_sar, language)} ${t.currency}`)})
         </span>
       </p>
-      <p className="mt-3 border-t border-teal-200 pt-2 text-xs text-slate-600">{t.booking.note}</p>
+      <p className="mt-3 border-t border-teal-200 dark:border-teal-800 pt-2 text-xs text-slate-600">{t.booking.note}</p>
       <DashboardLink />
     </section>
   );
 }
 
 const URGENCY_STYLE: Record<Urgency, string> = {
-  high: "bg-red-100 text-red-800",
-  normal: "bg-amber-100 text-amber-900",
+  high: "bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200",
+  normal: "bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-200",
   low: "bg-slate-200 text-slate-700",
 };
 
@@ -53,8 +53,8 @@ function TicketCard({ ticket }: { ticket: Ticket }) {
   const urgency = (ticket.urgency in URGENCY_STYLE ? ticket.urgency : "normal") as Urgency;
 
   return (
-    <section className="w-full max-w-sm self-start rounded-2xl border border-amber-200 bg-amber-50 p-4 text-slate-800 origin-top tabular-nums transition-[opacity,scale] duration-300 ease-out starting:scale-[0.96] starting:opacity-0">
-      <h2 className="text-sm font-semibold text-amber-900">↗ {t.ticket.title}</h2>
+    <section className="w-full max-w-sm self-start rounded-2xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 p-4 text-slate-800 origin-top tabular-nums transition-[opacity,scale] duration-300 ease-out starting:scale-[0.96] starting:opacity-0">
+      <h2 className="text-sm font-semibold text-amber-900 dark:text-amber-200">↗ {t.ticket.title}</h2>
       <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
         <span className="font-medium">{t.ticket.number(ticket.id)}</span>
         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${URGENCY_STYLE[urgency]}`}>
@@ -75,7 +75,7 @@ function DashboardLink() {
       href="/staff"
       target="_blank"
       rel="noopener"
-      className="mt-2 inline-block text-xs font-medium text-teal-700 underline underline-offset-2"
+      className="mt-2 inline-block text-xs font-medium text-teal-700 dark:text-teal-300 underline underline-offset-2"
     >
       {t.openDashboard}
     </a>

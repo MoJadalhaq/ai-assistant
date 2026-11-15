@@ -11,7 +11,7 @@ export function Bubble({ from, children }: { from: "guest" | "assistant"; childr
   const style =
     from === "guest"
       ? "self-end rounded-ee-sm bg-teal-700 text-white"
-      : "self-start rounded-ss-sm border border-slate-200 bg-white text-slate-800";
+      : "self-start rounded-ss-sm border border-slate-200 bg-surface text-slate-800";
   // A new message fades in from 6px below (200ms), instead of popping into place.
   // @starting-style (Tailwind's starting: variant) only applies when the element is first added.
   return (
@@ -78,7 +78,7 @@ function ErrorNotice({ message }: { message: Extract<ChatMessage, { role: "error
   const canRetry = message.error !== "daily_limit" && message.error !== "demo_quota_used";
 
   return (
-    <div role="alert" className="self-stretch rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-900">
+    <div role="alert" className="self-stretch rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 px-3.5 py-2.5 text-sm text-red-900 dark:text-red-200">
       <p>{t.errors[message.error]}</p>
       {canRetry && (
         <button

@@ -11,9 +11,9 @@ function isWeekendNight(night: string): boolean {
 
 /** Red when sold out, amber when a third or less is left, green otherwise. */
 function cellStyle(free: number, total: number): string {
-  if (free <= 0) return "bg-red-100 text-red-800";
-  if (free / total <= 1 / 3) return "bg-amber-100 text-amber-900";
-  return "bg-emerald-50 text-emerald-800";
+  if (free <= 0) return "bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200";
+  if (free / total <= 1 / 3) return "bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-200";
+  return "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300";
 }
 
 /**
@@ -27,11 +27,11 @@ export function FreeRoomsGrid({ overview }: { overview: StaffOverview }) {
   return (
     <section>
       <p className="text-sm text-slate-600">{t.staff.grid.caption}</p>
-      <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-surface">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th scope="col" className="sticky start-0 z-10 bg-white px-3 py-2 text-start font-medium text-slate-500">
+              <th scope="col" className="sticky start-0 z-10 bg-surface px-3 py-2 text-start font-medium text-slate-500">
                 {t.staff.grid.room}
               </th>
               {overview.nights.map((night) => {
@@ -52,7 +52,7 @@ export function FreeRoomsGrid({ overview }: { overview: StaffOverview }) {
           <tbody>
             {overview.rooms.map((room) => (
               <tr key={room.code} className="border-t border-slate-100">
-                <th scope="row" className="sticky start-0 z-10 bg-white px-3 py-2 text-start font-medium whitespace-nowrap text-slate-900">
+                <th scope="row" className="sticky start-0 z-10 bg-surface px-3 py-2 text-start font-medium whitespace-nowrap text-slate-900">
                   {language === "ar" ? room.nameAr : room.nameEn}
                   <span className="block text-xs font-normal text-slate-500">{t.staff.stats.ofTotal(room.totalUnits)}</span>
                 </th>

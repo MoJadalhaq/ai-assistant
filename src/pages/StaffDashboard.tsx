@@ -45,7 +45,7 @@ export function StaffDashboard() {
       </Header>
 
       <main className="mx-auto max-w-5xl px-4 py-4 tabular-nums">
-        <div className="flex flex-wrap items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+        <div className="flex flex-wrap items-start gap-3 rounded-xl border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 p-3 text-sm text-amber-950 dark:text-amber-100">
           <p className="min-w-0 flex-1 basis-60">
             {t.staff.demoNotice} <AboutButton showDashboardLink={false} />
           </p>
@@ -53,14 +53,14 @@ export function StaffDashboard() {
             type="button"
             onClick={handleReset}
             disabled={resetting}
-            className="press shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 font-medium hover:bg-amber-100 disabled:opacity-60"
+            className="press shrink-0 rounded-lg border border-amber-300 dark:border-amber-800 bg-surface px-3 py-1.5 font-medium hover:bg-amber-100 dark:hover:bg-amber-900/50 disabled:opacity-60"
           >
             {resetting ? t.staff.resetting : t.staff.reset}
           </button>
         </div>
 
         {notice && (
-          <p role="status" className={`mt-3 text-sm ${notice.error ? "text-red-700" : "text-teal-800"}`}>
+          <p role="status" className={`mt-3 text-sm ${notice.error ? "text-red-700 dark:text-red-300" : "text-teal-800 dark:text-teal-200"}`}>
             {notice.text}
           </p>
         )}
@@ -86,7 +86,7 @@ export function StaffDashboard() {
               {t.staff.freeRooms}
             </TabButton>
           </div>
-          <p className={`text-xs ${offline ? "text-red-700" : "text-slate-500"}`} aria-live="polite">
+          <p className={`text-xs ${offline ? "text-red-700 dark:text-red-300" : "text-slate-500"}`} aria-live="polite">
             <span className={`me-1 inline-block size-2 rounded-full ${offline ? "bg-red-500" : "bg-emerald-500"}`} />
             {offline ? t.staff.offline : t.staff.live}
           </p>
@@ -180,7 +180,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`press rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap sm:px-3 ${active ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
+      className={`press rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap sm:px-3 ${active ? "bg-surface text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
     >
       {children}
     </button>
@@ -188,8 +188,8 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
 }
 
 const URGENCY_STYLE: Record<Urgency, string> = {
-  high: "bg-red-100 text-red-800",
-  normal: "bg-amber-100 text-amber-900",
+  high: "bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200",
+  normal: "bg-amber-100 dark:bg-amber-900/40 text-amber-900 dark:text-amber-200",
   low: "bg-slate-200 text-slate-700",
 };
 
@@ -247,7 +247,7 @@ function TicketItem({
 
   return (
     <li
-      className={`rounded-xl border bg-white p-4 transition-[opacity,translate] duration-300 ease-out ${resolved ? "border-slate-200 opacity-70" : "border-slate-300"} ${isNew ? ARRIVAL : ""}`}
+      className={`rounded-xl border bg-surface p-4 transition-[opacity,translate] duration-300 ease-out ${resolved ? "border-slate-200 opacity-70" : "border-slate-300"} ${isNew ? ARRIVAL : ""}`}
     >
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="font-semibold text-slate-900">#{ticket.id}</span>
@@ -288,7 +288,7 @@ function TicketItem({
             type="button"
             onClick={() => setShowChat(!showChat)}
             aria-expanded={showChat}
-            className="mt-2 text-sm font-medium text-teal-700 underline underline-offset-2 hover:text-teal-900"
+            className="mt-2 text-sm font-medium text-teal-700 dark:text-teal-300 underline underline-offset-2 hover:text-teal-900 dark:hover:text-teal-200"
           >
             {showChat ? t.staff.conversation.hide : t.staff.conversation.show}
           </button>
@@ -336,10 +336,10 @@ function BookingList({ overview, isNew }: { overview: StaffOverview; isNew: (key
           ...(booking.rooms > 1 ? [t.booking.rooms(booking.rooms)] : []),
         ];
         return (
-          <li key={booking.id} className={`rounded-xl border border-slate-300 bg-white p-4 transition-[opacity,translate] duration-300 ease-out ${fresh ? ARRIVAL : ""}`}>
+          <li key={booking.id} className={`rounded-xl border border-slate-300 bg-surface p-4 transition-[opacity,translate] duration-300 ease-out ${fresh ? ARRIVAL : ""}`}>
             <div className="flex flex-wrap items-center gap-2 text-sm">
               <bdi className="font-mono text-base font-semibold tracking-wide text-slate-900">{booking.referenceCode}</bdi>
-              <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-900">
+              <span className="rounded-full bg-sky-100 dark:bg-sky-900/40 px-2 py-0.5 text-xs font-medium text-sky-900 dark:text-sky-200">
                 {t.staff.bookingStatus[booking.status]}
               </span>
               <Badges isNew={fresh} fromChat={booking.fromChat} />

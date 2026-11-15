@@ -21,6 +21,8 @@ const en = {
   demoBadge: "Demo · fictional hotel",
   switchLanguage: "عربي",
   switchLanguageLabel: "Switch to Arabic",
+  themeToDark: "Switch to dark mode",
+  themeToLight: "Switch to light mode",
   newChat: "New chat",
   welcome:
     "Hello! I'm the AI receptionist of Seaside Demo Hotel in Jeddah. I can answer questions, check which rooms are free and hold a booking for you. Write in Arabic, English or both.",
@@ -162,6 +164,8 @@ const ar: Strings = {
   demoBadge: "عرض تجريبي · فندق وهمي",
   switchLanguage: "EN",
   switchLanguageLabel: "التبديل إلى الإنجليزية",
+  themeToDark: "التبديل إلى الوضع الداكن",
+  themeToLight: "التبديل إلى الوضع الفاتح",
   newChat: "محادثة جديدة",
   welcome:
     "أهلاً وسهلاً! أنا موظف الاستقبال الذكي في فندق الشاطئ التجريبي بجدة. أقدر أجاوب على أسئلتك، وأشوف لك الغرف المتاحة، وأسوي لك حجز مبدئي. اكتب بالعربي أو الإنجليزي أو الاثنين مع بعض.",

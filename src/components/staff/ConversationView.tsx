@@ -29,13 +29,13 @@ export function ConversationView({ ticketId }: { ticketId: number }) {
   }, [ticketId]);
 
   if (state.status === "loading") return <p className="mt-2 text-sm text-slate-500">{t.staff.conversation.loading}</p>;
-  if (state.status === "error") return <p className="mt-2 text-sm text-red-700">{t.staff.errors[state.error]}</p>;
+  if (state.status === "error") return <p className="mt-2 text-sm text-red-700 dark:text-red-300">{t.staff.errors[state.error]}</p>;
   if (state.messages.length === 0) return <p className="mt-2 text-sm text-slate-500">{t.staff.conversation.empty}</p>;
 
   return (
     <ol className="mt-2 max-h-80 space-y-2 overflow-y-auto rounded-lg border border-slate-200 bg-slate-50 p-2 transition-opacity duration-150 ease-out starting:opacity-0">
       {state.messages.map((message, index) => (
-        <li key={index} className={`rounded-lg p-2 text-sm ${message.role === "guest" ? "bg-white" : "bg-teal-50"}`}>
+        <li key={index} className={`rounded-lg p-2 text-sm ${message.role === "guest" ? "bg-surface" : "bg-teal-50 dark:bg-teal-950/50"}`}>
           <p className="flex justify-between gap-2 text-xs text-slate-500">
             <span className="font-medium">{message.role === "guest" ? t.staff.conversation.guest : t.staff.conversation.assistant}</span>
             <span>{formatDateTime(message.at, language)}</span>
@@ -44,7 +44,7 @@ export function ConversationView({ ticketId }: { ticketId: number }) {
             <p className="mt-1 flex flex-wrap items-center gap-1 text-xs text-slate-500">
               {t.staff.conversation.used}
               {message.tools.map((tool, toolIndex) => (
-                <code key={toolIndex} dir="ltr" className="rounded bg-white px-1.5 py-0.5 text-teal-800">
+                <code key={toolIndex} dir="ltr" className="rounded bg-surface px-1.5 py-0.5 text-teal-800 dark:text-teal-200">
                   {tool}
                 </code>
               ))}

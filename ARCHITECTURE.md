@@ -153,6 +153,11 @@ typed strings object rather than an i18n library.
   pressed; the About panel opens slower than it closes. One set of easing curves is defined in
   `src/index.css`. Data people read (stats, the free-rooms grid, the 5-second refresh) never moves,
   and visitors who ask their device for reduced motion get fades only.
+- Dark mode follows the device until the visitor picks a theme with the header toggle. The slate
+  greys are flipped in one CSS block (`html[data-theme="dark"]` in `src/index.css`), so every grey
+  adapts without a `dark:` class; accent colours get explicit `dark:` variants. A tiny blocking script
+  (`public/theme-init.js`) applies the theme before the first paint, so there is no white flash. It is
+  a separate file because the Content-Security-Policy forbids inline scripts.
 - The API clients never throw. Every failure is a code with a message in both languages, and
   a failed guest message can be retried without being sent to the model twice.
 

@@ -12,7 +12,7 @@ export function Header({ label, wide, children }: { label?: string; wide?: boole
   const toggleLanguage = useUiStore((state) => state.toggleLanguage);
 
   return (
-    <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-10 border-b border-slate-200 bg-surface/95 backdrop-blur">
       <div className={`mx-auto flex items-center gap-2 px-4 py-2.5 sm:gap-3 ${wide ? "max-w-5xl" : "max-w-2xl"}`}>
         <img src="/favicon.svg" alt="" className="size-10 shrink-0 rounded-xl" />
         <div className="min-w-0 flex-1">
@@ -20,17 +20,18 @@ export function Header({ label, wide, children }: { label?: string; wide?: boole
             {t.productName}
           </h1>
           <div className="mt-0.5 flex flex-wrap gap-1.5">
-            <span className="max-w-full truncate rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
+            <span className="max-w-full truncate rounded-full bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 text-xs font-medium text-amber-900 dark:text-amber-200">
               {t.demoBadge}
             </span>
             {label && (
-              <span className="max-w-full truncate rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-900">
+              <span className="max-w-full truncate rounded-full bg-teal-100 dark:bg-teal-900/60 px-2 py-0.5 text-xs font-medium text-teal-900 dark:text-teal-100">
                 {label}
               </span>
             )}
           </div>
         </div>
         {children}
+        <ThemeButton />
         <button
           type="button"
           onClick={toggleLanguage}
@@ -43,6 +44,29 @@ export function Header({ label, wide, children }: { label?: string; wide?: boole
         </button>
       </div>
     </header>
+  );
+}
+
+/** Light/dark switch. Shows what it switches to: a moon in light mode, a sun in dark mode. */
+function ThemeButton() {
+  const t = useStrings();
+  const theme = useUiStore((state) => state.theme);
+  const toggleTheme = useUiStore((state) => state.toggleTheme);
+  const label = theme === "dark" ? t.themeToLight : t.themeToDark;
+
+  return (
+    <button type="button" onClick={toggleTheme} aria-label={label} title={label} className={ICON_BUTTON}>
+      <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        {theme === "dark" ? (
+          <>
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" strokeLinecap="round" />
+          </>
+        ) : (
+          <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" strokeLinejoin="round" />
+        )}
+      </svg>
+    </button>
   );
 }
 

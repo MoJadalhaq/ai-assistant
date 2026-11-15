@@ -1,9 +1,16 @@
 /* Tailwind CSS v4: this one import replaces the old config file and @tailwind directives. */
 @import "tailwindcss";
 
+/* Dark mode follows data-theme on <html> (set by public/theme-init.js before the first paint, then
+   by the header toggle), not only the device setting, so visitors can switch it themselves. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* IBM Plex Sans Arabic covers Arabic and Latin in one family, so mixed messages look consistent. */
 @theme {
   --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+
+  /* Cards, panels and the header: white in light mode, dark slate in dark mode (bg-surface). */
+  --color-surface: #ffffff;
 
   /* Motion: one set of curves for the whole site, so everything moves the same way.
      A strong ease-out starts fast (the interface answers at once) and settles softly.
@@ -28,8 +35,35 @@ html {
   color-scheme: light;
 }
 
+/* Dark theme. Instead of a dark: variant on every grey, the slate scale is flipped: the light
+   slates become dark ones and the other way round. So text-slate-900 (body text) turns light and
+   bg-slate-50 (the page) turns dark everywhere at once, with the same steps between shades.
+   Accent colours (teal, amber, red...) are used both as fills and as text, so they get explicit
+   dark: variants in the components instead. Values are Tailwind's own slate palette. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-surface: oklch(20.8% 0.042 265.755); /* slate-900 */
+  --color-slate-50: oklch(12.9% 0.042 264.695); /* slate-950: page background */
+  --color-slate-100: oklch(27.9% 0.041 260.031); /* slate-800: hover, shading, soft lines */
+  --color-slate-200: oklch(37.2% 0.044 257.287); /* slate-700: borders */
+  --color-slate-300: oklch(44.6% 0.043 257.281); /* slate-600: strong borders */
+  --color-slate-400: oklch(55.4% 0.046 257.417); /* slate-500 */
+  --color-slate-500: oklch(70.4% 0.04 256.788); /* slate-400: faint text */
+  --color-slate-600: oklch(86.9% 0.022 252.894); /* slate-300: muted text */
+  --color-slate-700: oklch(92.9% 0.013 255.508); /* slate-200 */
+  --color-slate-800: oklch(96.8% 0.007 247.896); /* slate-100 */
+  --color-slate-900: oklch(98.4% 0.003 247.858); /* slate-50: main text */
+  --color-slate-950: #ffffff;
+}
+
 body {
   @apply bg-slate-50 font-sans text-slate-900 antialiased;
+}
+
+/* Set for one frame while the theme switches (src/store/ui-store.ts), so all colours change together. */
+.theme-switching,
+.theme-switching * {
+  transition: none !important;
 }
 
 /* Press feedback: a button shrinks slightly while it's held, so a tap feels physical.
