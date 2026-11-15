@@ -57,6 +57,27 @@ const en = {
   } satisfies Record<ClientErrorCode, string>,
   retry: "Try again",
   currency: "SAR",
+  about: {
+    open: "About this demo",
+    newHere: "New here?",
+    title: "About this demo",
+    intro:
+      "A portfolio project: an AI receptionist for a fictional hotel in Jeddah. It chats in Saudi dialect, formal Arabic, English or a mix, answers only from the hotel's own information, checks free rooms, holds a booking once the guest confirms, and hands difficult cases to staff.",
+    tryTitle: "Things to try",
+    tries: [
+      { text: "Book a room in Saudi dialect, with a relative date:", example: "أبغى غرفة على البحر لشخصين من الخميس الجاي لين السبت" },
+      { text: "Mix Arabic and English in one message:", example: "عندكم parking؟ وكم أرخص غرفة لشخصين بكرة؟" },
+      { text: "Complain or ask for a manager, then open the staff dashboard: the ticket appears within seconds.", example: "I want to speak to a manager" },
+      { text: "Ask something the hotel hasn't published: it hands off to staff instead of making up an answer.", example: null },
+    ] as { text: string; example: string | null }[],
+    builtTitle: "How it's built",
+    built:
+      "React and Tailwind in the browser, one Cloudflare Worker with a D1 database, and Google Gemini with function calling. Dates, prices and the \"confirm before booking\" rule are enforced in code, not left to the AI, and its behaviour is checked with 25 scripted conversations.",
+    github: "Source code on GitHub",
+    architecture: "How it works",
+    dashboard: "Staff dashboard",
+    close: "Close",
+  },
   openDashboard: "Open the staff dashboard ↗",
   staff: {
     label: "Staff dashboard",
@@ -149,6 +170,27 @@ const ar: Strings = {
   },
   retry: "حاول مرة ثانية",
   currency: "ريال",
+  about: {
+    open: "عن هذا العرض",
+    newHere: "أول مرة هنا؟",
+    title: "عن هذا العرض",
+    intro:
+      "مشروع ضمن معرض أعمال: موظف استقبال ذكي لفندق غير حقيقي في جدة. يتكلم باللهجة السعودية والفصحى والإنجليزي أو خليط بينها، ويجاوب من معلومات الفندق فقط، ويشيّك على الغرف الفاضية، ويسوي حجز مبدئي بعد ما يوافق الضيف، ويحوّل الحالات الصعبة للموظفين.",
+    tryTitle: "جرّب هذي",
+    tries: [
+      { text: "احجز غرفة باللهجة، مع تاريخ نسبي:", example: "أبغى غرفة على البحر لشخصين من الخميس الجاي لين السبت" },
+      { text: "اخلط العربي والإنجليزي في نفس الرسالة:", example: "عندكم parking؟ وكم أرخص غرفة لشخصين بكرة؟" },
+      { text: "اشتكِ أو اطلب المدير، وبعدها افتح لوحة الموظفين: الطلب يظهر خلال ثوانٍ.", example: "أبغى أكلم المدير" },
+      { text: "اسأل عن شيء ما نشره الفندق: بيحوّلك للموظفين بدل ما يخترع جواب.", example: null },
+    ],
+    builtTitle: "طريقة البناء",
+    built:
+      "React و Tailwind في المتصفح، و Cloudflare Worker واحد مع قاعدة بيانات D1، و Google Gemini مع استدعاء الأدوات (function calling). التواريخ والأسعار وقاعدة «التأكيد قبل الحجز» مفروضة في الكود وليست متروكة للذكاء الاصطناعي، وسلوكه مختبر بـ 25 محادثة مكتوبة مسبقاً.",
+    github: "الكود على GitHub",
+    architecture: "طريقة العمل (بالإنجليزي)",
+    dashboard: "لوحة الموظفين",
+    close: "إغلاق",
+  },
   openDashboard: "فتح لوحة الموظفين ↗",
   staff: {
     label: "لوحة الموظفين",

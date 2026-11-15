@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { secureHeaders } from "hono/secure-headers";
 import { HOTEL_NAME_EN } from "./data/hotel-kb.ts";
 import { resetDemo } from "./data/reset-demo.ts";
 import { riyadhToday } from "./domain/dates.ts";
@@ -7,6 +8,9 @@ import { staff } from "./routes/staff.ts";
 
 // `Env` is generated from wrangler.jsonc by `npm run cf-typegen`. It lists the bindings (here: DB).
 export const app = new Hono<{ Bindings: Env }>();
+
+// Standard protective headers (nosniff, no framing, strict referrer...) on every API response.
+app.use("/api/*", secureHeaders());
 
 // Health check. It reads from D1 on purpose: a green result proves the database binding and
 // the migrations are in place, not only that the Worker started.

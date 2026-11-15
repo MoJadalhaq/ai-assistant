@@ -4,6 +4,7 @@ import type { StaffBooking, StaffOverview, StaffTicket } from "../../shared/api-
 import type { Urgency } from "../../shared/types.ts";
 import type { StaffClientError } from "../api/staff-client.ts";
 import { fetchOverview, resetDemoData, resolveTicket } from "../api/staff-client.ts";
+import { AboutButton } from "../components/AboutDialog.tsx";
 import { Header, PageLink } from "../components/Header.tsx";
 import { formatAmount, formatDate, formatDateTime } from "../lib/format.ts";
 import { useStrings, useUiStore } from "../store/ui-store.ts";
@@ -41,7 +42,9 @@ export function StaffDashboard() {
 
       <main className="mx-auto max-w-5xl px-4 py-4">
         <div className="flex flex-wrap items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
-          <p className="min-w-0 flex-1 basis-60">{t.staff.demoNotice}</p>
+          <p className="min-w-0 flex-1 basis-60">
+            {t.staff.demoNotice} <AboutButton showDashboardLink={false} />
+          </p>
           <button
             type="button"
             onClick={handleReset}

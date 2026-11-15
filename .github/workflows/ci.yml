@@ -1,0 +1,26 @@
+# Runs on every push to main and on pull requests: type check, build and all tests.
+# No secrets are needed: the tests use a local D1 database inside workerd and a scripted fake model.
+# (The evals call the real Gemini API, so they are run by hand with `npm run eval`.)
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Generates the Cloudflare binding types, type checks every part, and builds the site and Worker.
+      - run: npm run build
+      - run: npm test

@@ -1,3 +1,4 @@
+import { AboutButton } from "./AboutDialog.tsx";
 import { useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useChatStore } from "../store/chat-store.ts";
@@ -61,7 +62,9 @@ export function Composer() {
           </svg>
         </button>
       </form>
-      <p className="mx-auto max-w-2xl px-4 pb-2 text-center text-[11px] text-slate-500">{t.privacyNote}</p>
+      <p className="mx-auto max-w-2xl px-4 pb-2 text-center text-[11px] text-slate-500">
+        {t.privacyNote} · <AboutButton />
+      </p>
     </footer>
   );
 }

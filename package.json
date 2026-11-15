@@ -2,6 +2,7 @@
   "name": "ai-receptionist",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "description": "Demo: a bilingual (Saudi Arabic and English) AI receptionist for a fictional hotel in Jeddah.",
   "type": "module",
   "engines": {

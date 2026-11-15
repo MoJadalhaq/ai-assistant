@@ -1,5 +1,7 @@
 # Sahil Demo Hotel: bilingual AI receptionist (demo)
 
+[![CI](https://github.com/MoJadalhaq/ai-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/MoJadalhaq/ai-assistant/actions/workflows/ci.yml) [![Live demo](https://img.shields.io/badge/demo-live-0f766e)](https://reception.jadalhaq.com) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 > **Demo, fictional hotel.** "Sahil Demo Hotel, Jeddah" does not exist. Every name, price, phone number and booking in this repository is made up.
 
 **Live demo:** [reception.jadalhaq.com](https://reception.jadalhaq.com) · staff dashboard: [reception.jadalhaq.com/staff](https://reception.jadalhaq.com/staff)
@@ -139,3 +141,7 @@ migrations/          D1 schema
 evals/               Eval cases, grader and results
 docs/                Plan and decision log, webhook payload, demo-video script
 ```
+
+## License
+
+MIT, see [LICENSE](LICENSE). The hotel, its guests and all the data are fictional.

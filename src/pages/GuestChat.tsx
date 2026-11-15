@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Composer } from "../components/Composer.tsx";
+import { AboutButton } from "../components/AboutDialog.tsx";
 import { Header, NewChatButton, PageLink } from "../components/Header.tsx";
 import { Bubble, MessageItem, MessageText, TypingIndicator } from "../components/Messages.tsx";
 import { STARTER_PROMPTS } from "../i18n/strings.ts";
@@ -59,6 +60,9 @@ function Welcome() {
           </button>
         ))}
       </div>
+      <p className="mt-1 text-sm text-slate-500">
+        {t.about.newHere} <AboutButton />
+      </p>
     </>
   );
 }
