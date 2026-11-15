@@ -11,7 +11,7 @@ An AI receptionist for a hotel in Jeddah that chats with guests in Saudi dialect
 <p align="center">
   <img src="docs/images/chat-booking-ar.jpg" alt="A guest books a sea-view room in Hijazi Arabic; the chat shows the booking hold card with reference SDH-G3YV" width="300">
   &nbsp;
-  <img src="docs/images/staff-dashboard.jpg" alt="The staff dashboard with a new high-priority complaint from the chat, summarised in English and Arabic" width="520">
+  <img src="docs/images/staff-dashboard.jpg" alt="The staff dashboard: key numbers, and a high-priority complaint from the chat with its summary in English and Arabic and the conversation behind it" width="520">
 </p>
 
 ## What it does
