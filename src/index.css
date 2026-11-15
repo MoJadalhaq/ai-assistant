@@ -4,6 +4,24 @@
 /* IBM Plex Sans Arabic covers Arabic and Latin in one family, so mixed messages look consistent. */
 @theme {
   --font-sans: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion: one set of curves for the whole site, so everything moves the same way.
+     A strong ease-out starts fast (the interface answers at once) and settles softly.
+     UI never uses ease-in: it starts slowly, which reads as lag. Overrides Tailwind's ease-out/in-out. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* "The receptionist is typing": a calm fade wave, no bouncing. */
+  --animate-typing: typing 1.2s ease-in-out infinite;
+  @keyframes typing {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
 }
 
 html {
@@ -12,4 +30,65 @@ html {
 
 body {
   @apply bg-slate-50 font-sans text-slate-900 antialiased;
+}
+
+/* Press feedback: a button shrinks slightly while it's held, so a tap feels physical.
+   Fast (160ms) because buttons are pressed often, and only the properties that change are
+   transitioned, never "all". Used as the `press` class. */
+@utility press {
+  transition-property: transform, color, background-color, border-color;
+  transition-duration: 160ms;
+  transition-timing-function: var(--ease-out);
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+/* "About this demo" (a native <dialog>): fades and grows in over 250ms, closes faster (150ms),
+   because a closing panel should get out of the way. It starts at 96%, never from nothing.
+   @starting-style gives the opening state; allow-discrete keeps it on screen while it fades out. */
+.about-dialog {
+  opacity: 0;
+  scale: 0.96;
+  transition-property: opacity, scale, display, overlay;
+  transition-duration: 150ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+.about-dialog[open] {
+  opacity: 1;
+  scale: 1;
+  transition-duration: 250ms;
+}
+@starting-style {
+  .about-dialog[open] {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+.about-dialog::backdrop {
+  background-color: rgb(15 23 42 / 0);
+  transition-property: background-color, display, overlay;
+  transition-duration: 150ms;
+  transition-behavior: allow-discrete;
+}
+.about-dialog[open]::backdrop {
+  background-color: rgb(15 23 42 / 0.5);
+  transition-duration: 250ms;
+}
+@starting-style {
+  .about-dialog[open]::backdrop {
+    background-color: rgb(15 23 42 / 0);
+  }
+}
+
+/* People who ask their device for less motion get fades only: nothing slides or grows.
+   Elements still start from their entrance state, but only opacity and colours are animated. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after,
+  ::backdrop {
+    transition-property: opacity, color, background-color, border-color !important;
+  }
 }

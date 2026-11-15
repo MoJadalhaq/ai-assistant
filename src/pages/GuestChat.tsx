@@ -54,7 +54,7 @@ function Welcome() {
             type="button"
             dir="auto"
             onClick={() => void send(prompt)}
-            className="rounded-xl border border-teal-200 bg-white px-3.5 py-2.5 text-start text-sm text-teal-900 shadow-xs transition hover:border-teal-400 hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-teal-600"
+            className="rounded-xl border border-teal-200 bg-white px-3.5 py-2.5 text-start text-sm text-teal-900 shadow-xs press hover:border-teal-400 hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-teal-600"
           >
             {prompt}
           </button>

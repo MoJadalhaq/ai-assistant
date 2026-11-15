@@ -19,7 +19,7 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
       <button
         type="button"
         onClick={() => dialog.current?.showModal()}
-        className={`font-medium text-teal-700 underline underline-offset-2 hover:text-teal-900 ${className}`}
+        className={`font-medium text-teal-700 underline underline-offset-2 transition-colors hover:text-teal-900 ${className}`}
       >
         {t.about.open}
       </button>
@@ -30,7 +30,7 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
         ref={dialog}
         aria-labelledby={titleId}
         onClick={(event) => event.target === dialog.current && close()}
-        className="m-auto w-[min(32rem,calc(100%-2rem))] rounded-2xl p-0 text-start text-sm text-slate-700 shadow-xl backdrop:bg-slate-900/50"
+        className="about-dialog m-auto w-[min(32rem,calc(100%-2rem))] rounded-2xl p-0 text-start text-sm text-slate-700 shadow-xl"
       >
         <div className="max-h-[85dvh] overflow-y-auto p-5">
           <h2 id={titleId} className="text-lg font-semibold text-slate-900">
@@ -70,7 +70,7 @@ export function AboutButton({ className = "", showDashboardLink = true }: { clas
             <button
               type="button"
               onClick={close}
-              className="ms-auto rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800"
+              className="press ms-auto rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800"
             >
               {t.about.close}
             </button>

@@ -49,7 +49,7 @@ function Stat({ label, value, children }: { label: string; value?: number; child
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-3">
       <p className="text-xs text-slate-500">{label}</p>
-      {value !== undefined && <p className="mt-1 text-2xl font-semibold text-slate-900">{value}</p>}
+      {value !== undefined && <p className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-slate-900 tabular-nums">{value}</p>}
       {children && <p className={`text-xs text-slate-600 ${value === undefined ? "mt-2 text-sm" : ""}`}>{children}</p>}
     </div>
   );

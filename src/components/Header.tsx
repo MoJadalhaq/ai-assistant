@@ -3,7 +3,7 @@ import { useChatStore } from "../store/chat-store.ts";
 import { useStrings, useUiStore } from "../store/ui-store.ts";
 
 const ICON_BUTTON =
-  "flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-teal-600";
+  "press flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-teal-600";
 
 /** Shared by both pages. `label` names the page next to the demo badge, `wide` matches the dashboard width, `children` are page-specific buttons. */
 export function Header({ label, wide, children }: { label?: string; wide?: boolean; children?: ReactNode }) {
@@ -37,7 +37,7 @@ export function Header({ label, wide, children }: { label?: string; wide?: boole
           lang={language === "ar" ? "en" : "ar"}
           aria-label={t.switchLanguageLabel}
           title={t.switchLanguageLabel}
-          className="shrink-0 rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-teal-600"
+          className="press shrink-0 rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-teal-600"
         >
           {t.switchLanguage}
         </button>

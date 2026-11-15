@@ -43,7 +43,7 @@ export function StaffDashboard() {
         <PageLink href="/" label={t.staff.openChat} icon="chat" />
       </Header>
 
-      <main className="mx-auto max-w-5xl px-4 py-4">
+      <main className="mx-auto max-w-5xl px-4 py-4 tabular-nums">
         <div className="flex flex-wrap items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
           <p className="min-w-0 flex-1 basis-60">
             {t.staff.demoNotice} <AboutButton showDashboardLink={false} />
@@ -52,7 +52,7 @@ export function StaffDashboard() {
             type="button"
             onClick={handleReset}
             disabled={resetting}
-            className="shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 font-medium hover:bg-amber-100 disabled:opacity-60"
+            className="press shrink-0 rounded-lg border border-amber-300 bg-white px-3 py-1.5 font-medium hover:bg-amber-100 disabled:opacity-60"
           >
             {resetting ? t.staff.resetting : t.staff.reset}
           </button>
@@ -161,6 +161,13 @@ function useOverview() {
 }
 
 const ticketKey = (ticket: StaffTicket) => `ticket-${ticket.id}`;
+
+/**
+ * A ticket or booking that arrives while the dashboard is open is outlined and slides in from
+ * 8px above (300ms). @starting-style only applies when the card is first added to the page, so
+ * cards that were there at load, and the 5-second refreshes, never move.
+ */
+const ARRIVAL = "ring-2 ring-teal-400 starting:-translate-y-2 starting:opacity-0";
 const bookingKey = (booking: StaffBooking) => `booking-${booking.id}`;
 
 function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
@@ -170,7 +177,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap sm:px-3 ${active ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
+      className={`press rounded-lg px-2.5 py-1.5 text-sm font-medium whitespace-nowrap sm:px-3 ${active ? "bg-white text-slate-900 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}
     >
       {children}
     </button>
@@ -237,7 +244,7 @@ function TicketItem({
 
   return (
     <li
-      className={`rounded-xl border bg-white p-4 ${resolved ? "border-slate-200 opacity-70" : "border-slate-300"} ${isNew ? "ring-2 ring-teal-400" : ""}`}
+      className={`rounded-xl border bg-white p-4 transition-[opacity,translate] duration-300 ease-out ${resolved ? "border-slate-200 opacity-70" : "border-slate-300"} ${isNew ? ARRIVAL : ""}`}
     >
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="font-semibold text-slate-900">#{ticket.id}</span>
@@ -295,7 +302,7 @@ function TicketItem({
             type="button"
             onClick={handleResolve}
             disabled={saving}
-            className="rounded-lg bg-teal-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-teal-800 disabled:opacity-60"
+            className="press rounded-lg bg-teal-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-teal-800 disabled:opacity-60"
           >
             {saving ? t.staff.saving : t.staff.resolve}
           </button>
@@ -326,7 +333,7 @@ function BookingList({ overview, isNew }: { overview: StaffOverview; isNew: (key
           ...(booking.rooms > 1 ? [t.booking.rooms(booking.rooms)] : []),
         ];
         return (
-          <li key={booking.id} className={`rounded-xl border border-slate-300 bg-white p-4 ${fresh ? "ring-2 ring-teal-400" : ""}`}>
+          <li key={booking.id} className={`rounded-xl border border-slate-300 bg-white p-4 transition-[opacity,translate] duration-300 ease-out ${fresh ? ARRIVAL : ""}`}>
             <div className="flex flex-wrap items-center gap-2 text-sm">
               <bdi className="font-mono text-base font-semibold tracking-wide text-slate-900">{booking.referenceCode}</bdi>
               <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-900">

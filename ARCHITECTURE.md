@@ -148,6 +148,11 @@ typed strings object rather than an i18n library.
 - Every message has `dir="auto"`: an Arabic reply reads right to left even in the English UI.
 - Booking references and dates are wrapped in `<bdi>` and kept on one line, since a hyphen
   inside Arabic text otherwise splits them across lines in the wrong order.
+- Motion is CSS only, no animation library, and used sparingly: new chat messages, booking and
+  ticket cards, and dashboard arrivals fade in with `@starting-style`; buttons shrink slightly while
+  pressed; the About panel opens slower than it closes. One set of easing curves is defined in
+  `src/index.css`. Data people read (stats, the free-rooms grid, the 5-second refresh) never moves,
+  and visitors who ask their device for reduced motion get fades only.
 - The API clients never throw. Every failure is a code with a message in both languages, and
   a failed guest message can be retried without being sent to the model twice.
 

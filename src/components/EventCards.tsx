@@ -20,7 +20,7 @@ function BookingCard({ booking }: { booking: Booking }) {
   ];
 
   return (
-    <section className="w-full max-w-sm self-start rounded-2xl border border-teal-200 bg-teal-50 p-4 text-slate-800">
+    <section className="w-full max-w-sm self-start rounded-2xl border border-teal-200 bg-teal-50 p-4 text-slate-800 origin-top tabular-nums transition-[opacity,scale] duration-300 ease-out starting:scale-[0.96] starting:opacity-0">
       <h2 className="text-sm font-semibold text-teal-800">✓ {t.booking.title}</h2>
       <p className="mt-2 text-xs text-slate-500">{t.booking.reference}</p>
       <p dir="ltr" className="text-start font-mono text-2xl font-semibold tracking-wider text-slate-900">
@@ -53,7 +53,7 @@ function TicketCard({ ticket }: { ticket: Ticket }) {
   const urgency = (ticket.urgency in URGENCY_STYLE ? ticket.urgency : "normal") as Urgency;
 
   return (
-    <section className="w-full max-w-sm self-start rounded-2xl border border-amber-200 bg-amber-50 p-4 text-slate-800">
+    <section className="w-full max-w-sm self-start rounded-2xl border border-amber-200 bg-amber-50 p-4 text-slate-800 origin-top tabular-nums transition-[opacity,scale] duration-300 ease-out starting:scale-[0.96] starting:opacity-0">
       <h2 className="text-sm font-semibold text-amber-900">↗ {t.ticket.title}</h2>
       <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
         <span className="font-medium">{t.ticket.number(ticket.id)}</span>

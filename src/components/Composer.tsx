@@ -54,7 +54,7 @@ export function Composer() {
           type="submit"
           disabled={!text.trim() || pending}
           aria-label={t.send}
-          className="flex size-11 shrink-0 items-center justify-center rounded-full bg-teal-700 text-white transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 disabled:bg-slate-300"
+          className="flex size-11 shrink-0 items-center justify-center rounded-full bg-teal-700 text-white press hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 disabled:bg-slate-300"
         >
           {/* The arrow points the way text flows, so it flips in Arabic. */}
           <svg viewBox="0 0 24 24" className="size-5 rtl:-scale-x-100" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">

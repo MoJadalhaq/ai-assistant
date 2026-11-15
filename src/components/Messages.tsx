@@ -12,7 +12,15 @@ export function Bubble({ from, children }: { from: "guest" | "assistant"; childr
     from === "guest"
       ? "self-end rounded-ee-sm bg-teal-700 text-white"
       : "self-start rounded-ss-sm border border-slate-200 bg-white text-slate-800";
-  return <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 shadow-xs ${style}`}>{children}</div>;
+  // A new message fades in from 6px below (200ms), instead of popping into place.
+  // @starting-style (Tailwind's starting: variant) only applies when the element is first added.
+  return (
+    <div
+      className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 shadow-xs transition-[opacity,translate] duration-200 ease-out starting:translate-y-1.5 starting:opacity-0 ${style}`}
+    >
+      {children}
+    </div>
+  );
 }
 
 /**
@@ -90,10 +98,10 @@ export function TypingIndicator() {
   return (
     <Bubble from="assistant">
       <span className="flex items-center gap-1 py-1.5" role="status" aria-label={t.typing}>
-        {[0, 150, 300].map((delay) => (
+        {[0, 160, 320].map((delay) => (
           <span
             key={delay}
-            className="size-2 animate-bounce rounded-full bg-slate-400"
+            className="size-2 animate-typing rounded-full bg-slate-500"
             style={{ animationDelay: `${delay}ms` }}
           />
         ))}

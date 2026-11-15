@@ -33,7 +33,7 @@ export function ConversationView({ ticketId }: { ticketId: number }) {
   if (state.messages.length === 0) return <p className="mt-2 text-sm text-slate-500">{t.staff.conversation.empty}</p>;
 
   return (
-    <ol className="mt-2 max-h-80 space-y-2 overflow-y-auto rounded-lg border border-slate-200 bg-slate-50 p-2">
+    <ol className="mt-2 max-h-80 space-y-2 overflow-y-auto rounded-lg border border-slate-200 bg-slate-50 p-2 transition-opacity duration-150 ease-out starting:opacity-0">
       {state.messages.map((message, index) => (
         <li key={index} className={`rounded-lg p-2 text-sm ${message.role === "guest" ? "bg-white" : "bg-teal-50"}`}>
           <p className="flex justify-between gap-2 text-xs text-slate-500">
