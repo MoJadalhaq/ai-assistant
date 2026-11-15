@@ -1,6 +1,6 @@
 # Architecture
 
-How the Sahil Demo Hotel receptionist works, and why it is built this way.
+How the AI Receptionist works, and why it is built this way.
 The hotel is fictional; see the [README](README.md) for what the demo does and how to run it.
 The full decision log is in [docs/PLAN.md](docs/PLAN.md).
 

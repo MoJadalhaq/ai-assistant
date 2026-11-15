@@ -14,8 +14,8 @@ export default function App() {
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
-    document.title = isStaff ? `${t.staff.label} · ${t.hotelName}` : t.pageTitle;
-  }, [language, isStaff, t.pageTitle, t.staff.label, t.hotelName]);
+    document.title = isStaff ? `${t.staff.label} · ${t.productName}` : t.pageTitle;
+  }, [language, isStaff, t.pageTitle, t.staff.label, t.productName]);
 
   return isStaff ? <StaffDashboard /> : <GuestChat />;
 }

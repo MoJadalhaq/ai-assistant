@@ -1,4 +1,4 @@
-// Knowledge base for Sahil Demo Hotel, Jeddah.
+// Knowledge base for Seaside Demo Hotel, Jeddah (fictional).
 //
 // THE HOTEL IS FICTIONAL. Every name, price and policy below is made up for this demo.
 //
@@ -12,8 +12,8 @@
 
 import type { Room } from "../../shared/types.ts";
 
-export const HOTEL_NAME_EN = "Sahil Demo Hotel, Jeddah";
-export const HOTEL_NAME_AR = "فندق ساحل التجريبي، جدة";
+export const HOTEL_NAME_EN = "Seaside Demo Hotel, Jeddah";
+export const HOTEL_NAME_AR = "فندق الشاطئ التجريبي، جدة";
 
 export const ROOM_TYPES: Room[] = [
   {

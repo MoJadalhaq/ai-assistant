@@ -1,7 +1,7 @@
 # Eval results
 
 - **Model:** `gemini-3.5-flash-lite` (thinking: model default)
-- **Run:** 2026-11-11 21:59 UTC, 5.1 min, 61 model calls
+- **Run:** 2026-11-15 14:54 UTC, 5.2 min, 63 model calls
 - **Clock frozen at:** 2026-11-11T09:00:00Z (Wednesday, 12:00 Riyadh)
 - **Result: 25/25 cases passed**
 

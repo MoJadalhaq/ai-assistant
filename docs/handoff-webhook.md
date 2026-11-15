@@ -27,7 +27,7 @@ The dashboard still shows every ticket either way.
 {
   "event": "handoff.created",
   "sentAt": "2026-11-12T09:00:01.000Z",
-  "hotel": "Sahil Demo Hotel, Jeddah",
+  "hotel": "Seaside Demo Hotel, Jeddah",
   "dashboardUrl": "https://<your-worker>/staff",
   "ticket": {
     "id": 7,

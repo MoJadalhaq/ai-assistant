@@ -1,4 +1,4 @@
-// Booking references such as "SDH-7K3Q" (SDH = Sahil Demo Hotel).
+// Booking references such as "SDH-7K3Q" (SDH = Seaside Demo Hotel).
 
 // No 0/O and no 1/I/L: those get mixed up when a code is read out on a call or typed from a screenshot.
 const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";

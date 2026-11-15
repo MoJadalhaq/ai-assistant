@@ -16,14 +16,14 @@ export const STARTER_PROMPTS = [
 ];
 
 const en = {
-  pageTitle: "Sahil Demo Hotel · AI receptionist (demo)",
-  hotelName: "Sahil Demo Hotel",
-  city: "Jeddah",
+  pageTitle: "AI Receptionist · Seaside Demo Hotel (demo)",
+  productName: "AI Receptionist",
   demoBadge: "Demo · fictional hotel",
-  switchLanguage: "العربية",
+  switchLanguage: "عربي",
+  switchLanguageLabel: "Switch to Arabic",
   newChat: "New chat",
   welcome:
-    "Hello! I'm the hotel's AI receptionist. I can answer questions, check which rooms are free and hold a booking for you. Write in Arabic, English or both.",
+    "Hello! I'm the AI receptionist of Seaside Demo Hotel in Jeddah. I can answer questions, check which rooms are free and hold a booking for you. Write in Arabic, English or both.",
   startersLabel: "Try one of these",
   privacyNote: "Demo only: please use made-up names and phone numbers. Messages are processed by Google Gemini.",
   placeholder: "Type your message…",
@@ -129,14 +129,14 @@ const en = {
 type Strings = typeof en;
 
 const ar: Strings = {
-  pageTitle: "فندق ساحل التجريبي · موظف استقبال ذكي (عرض تجريبي)",
-  hotelName: "فندق ساحل التجريبي",
-  city: "جدة",
-  demoBadge: "عرض تجريبي · فندق غير حقيقي",
-  switchLanguage: "English",
+  pageTitle: "موظف الاستقبال الذكي · فندق الشاطئ التجريبي (عرض تجريبي)",
+  productName: "موظف الاستقبال الذكي",
+  demoBadge: "عرض تجريبي · فندق وهمي",
+  switchLanguage: "EN",
+  switchLanguageLabel: "التبديل إلى الإنجليزية",
   newChat: "محادثة جديدة",
   welcome:
-    "أهلاً وسهلاً! أنا موظف الاستقبال الذكي في الفندق. أقدر أجاوب على أسئلتك، وأشوف لك الغرف المتاحة، وأسوي لك حجز مبدئي. اكتب بالعربي أو الإنجليزي أو الاثنين مع بعض.",
+    "أهلاً وسهلاً! أنا موظف الاستقبال الذكي في فندق الشاطئ التجريبي بجدة. أقدر أجاوب على أسئلتك، وأشوف لك الغرف المتاحة، وأسوي لك حجز مبدئي. اكتب بالعربي أو الإنجليزي أو الاثنين مع بعض.",
   startersLabel: "جرّب واحدة من هذي",
   privacyNote: "هذا عرض تجريبي: استخدم أسماء وأرقام جوال وهمية. الرسائل تتم معالجتها عبر Google Gemini.",
   placeholder: "اكتب رسالتك…",

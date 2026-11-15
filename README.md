@@ -1,15 +1,15 @@
-# Sahil Demo Hotel: bilingual AI receptionist (demo)
+# AI Receptionist: a hotel front desk that speaks Saudi Arabic and English
 
 [![CI](https://github.com/MoJadalhaq/ai-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/MoJadalhaq/ai-assistant/actions/workflows/ci.yml) [![Live demo](https://img.shields.io/badge/demo-live-0f766e)](https://reception.jadalhaq.com) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-> **Demo, fictional hotel.** "Sahil Demo Hotel, Jeddah" does not exist. Every name, price, phone number and booking in this repository is made up.
+> **Demo, fictional hotel.** "Seaside Demo Hotel, Jeddah" does not exist. Every name, price, phone number and booking in this repository is made up.
 
 **Live demo:** [reception.jadalhaq.com](https://reception.jadalhaq.com) · staff dashboard: [reception.jadalhaq.com/staff](https://reception.jadalhaq.com/staff)
 
 An AI receptionist for a hotel in Jeddah that chats with guests in Saudi dialect (Hijazi, Najdi), formal Arabic, English, or a mix of them in one sentence. It answers questions from the hotel's knowledge base, checks which rooms are free, creates booking holds, and hands difficult conversations to staff with a summary in both languages. Staff see bookings and handoffs arrive on a live dashboard.
 
 <p align="center">
-  <img src="docs/images/chat-booking-ar.jpg" alt="A guest books a sea-view room in Hijazi Arabic; the chat shows the booking hold card with reference SDH-N24Z" width="300">
+  <img src="docs/images/chat-booking-ar.jpg" alt="A guest books a sea-view room in Hijazi Arabic; the chat shows the booking hold card with reference SDH-G3YV" width="300">
   &nbsp;
   <img src="docs/images/staff-dashboard.jpg" alt="The staff dashboard with a new high-priority complaint from the chat, summarised in English and Arabic" width="520">
 </p>
@@ -49,11 +49,14 @@ The model never touches the database. It calls four tools (`get_hotel_info`, `ch
 | Run (`gemini-3.5-flash-lite`) | Passed | Report |
 |---|---|---|
 | Baseline | 20/25 | [results-baseline.md](evals/results-baseline.md) |
-| After two prompt fixes | **25/25** | [results.md](evals/results.md) |
+| After the prompt fixes below | **25/25** | [results.md](evals/results.md) |
 
 What the baseline caught, and the fixes:
 - **Arabic replies to English guests** (3 cases). The guest's language is now detected in code and the prompt states it outright: "reply in English only".
 - **Wrong dates** for "الويكند الجاي" (next weekend) and "next Friday" (2 cases). The prompt now includes those dates already worked out, as it already did with a calendar.
+
+A later rerun caught one more:
+- **Guessing the party size.** Asked for "a suite for three nights from Thursday", the model checked availability for 1 guest before asking how many people were coming. The prompt now says never to guess the number of guests; the case then passed 3 runs out of 3, and the full suite 25/25.
 
 Earlier manual runs found two worse failures, now fixed in code and checked by every eval case:
 - **The model invented a booking reference.** Tool results had been put back into the history as text, and the model imitated that text instead of calling the tool. Earlier tool calls are now replayed in Gemini's own function-call format.

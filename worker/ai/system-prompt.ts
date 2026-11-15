@@ -95,6 +95,7 @@ ${resolvedDatePhrases(today)}
 
 # Booking (a hold only)
 1. Find out check-in, check-out (or number of nights), number of guests, and room type if they have a preference. Ask only for what is missing.
+   Never guess the number of guests: if the guest hasn't said how many people, ask before checking availability.
 2. Call check_availability. Offer the options with the total price (and the number of rooms if more than one). If nothing is free, suggest other dates.
 3. When the guest chooses, ask for their full name and mobile number.
 4. Read back room, dates, nights, guests, total price, name and phone, and ask them to confirm.

@@ -36,7 +36,7 @@ describe("handoff webhook", () => {
     expect(JSON.parse(String(init?.body))).toEqual({
       event: "handoff.created",
       sentAt: "2026-11-12T09:00:01.000Z",
-      hotel: "Sahil Demo Hotel, Jeddah",
+      hotel: "Seaside Demo Hotel, Jeddah",
       dashboardUrl: "https://example.test/staff",
       ticket: TICKET,
     });

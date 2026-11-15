@@ -1,4 +1,4 @@
--- Sahil Demo Hotel (fictional): first schema.
+-- Seaside Demo Hotel (fictional): first schema.
 -- Dates are 'YYYY-MM-DD' text in Riyadh time. Money is whole halalas (1 SAR = 100 halalas).
 -- CHECK constraints keep bad values out even if a bug slips past the TypeScript validation.
 

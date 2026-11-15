@@ -1,6 +1,6 @@
-# Sahil Demo Hotel: AI Receptionist (project plan)
+# AI Receptionist (project plan)
 
-> Demo project. **Sahil Demo Hotel, Jeddah is fictional.** All names, prices, phone numbers and bookings in this repo are made up.
+> Demo project. **Seaside Demo Hotel, Jeddah is fictional.** (Called "Sahil Demo Hotel" until 2026-11-15.) All names, prices, phone numbers and bookings in this repo are made up.
 
 Status: **Phase 4 is done: the staff dashboard, the nightly reset and the optional handoff webhook are live. Firebase sign-in was left out for now (decision 23). Phase 6 is done too: README with screenshots and a diagram, ARCHITECTURE.md, and the demo-video script (docs/DEMO-VIDEO-SCRIPT.md). Phase 5 (voice, stretch) is optional and not started.** This file is the reference for decisions; it is updated when a decision changes.
 
